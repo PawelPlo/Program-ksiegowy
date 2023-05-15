@@ -65,14 +65,14 @@ Wroc do menu glownego - wpisz: 4""")
                 powrot=input('Powrot do menu "Stan magazynu" - wybierz "Q":   ')
             if wybor2 == "2":
                 while True:
-                    produkt1 = input("\nWpisz nazwe nowego produktu:  ")
+                    produkt = input("\nWpisz nazwe nowego produktu:  ")
                     ilosc = input("Wpisz ilosc produktu:   ")
                     ilosc = float(ilosc)
                     cena = input("Wpisz cene produktu:  ")
                     cena = float(cena)
                     wartosc = ilosc * cena
                     wartosc = float(wartosc)
-                    stan_magazynu[produkt1] = ilosc, cena, wartosc
+                    stan_magazynu[produkt] = {"ilosc": ilosc, "cena": cena, "wartosc": wartosc}
                     print(stan_magazynu)
                     print("\nCzy chcesz wprowadzic kolejny produkt? t/n")
                     odp2 = input()
@@ -87,9 +87,9 @@ Wroc do menu glownego - wpisz: 4""")
                         continue
             if wybor2 == "3":
                 while True:
-                    produkt2 = input("\nWpisz nazwe nowego produktu do wykreslenia:  ")
+                    produkt = input("\nWpisz nazwe nowego produktu do wykreslenia:  ")
                     #moze dac pytanie "Czy na pewno chcesz wykreslic?"
-                    del stan_magazynu[produkt2]
+                    del stan_magazynu[produkt]
                     print(stan_magazynu)
                     print("\nCzy chcesz wykreslic kolejny produkt? t/n")
                     odp3 = input()

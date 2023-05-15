@@ -15,7 +15,7 @@ print("Aktualny stan konta wynosi:{} zl.\n".format(konto))
 while True:
     print('''Wybierz opcje:
     Linia kredytowa - wpisz: 1
-    Saldo (operacje na koncie) - wpisz: 2
+    Saldo i operacje na koncie - wpisz: 2
     Stan magazynu (dane calosciowe) - wpisz: 3
     Znajdz produkt w magazynie - wpisz: 4
     Sprzedaz - wpisz: 5
@@ -53,10 +53,11 @@ while True:
         print("Stan magazynu")
         print("Wybierz opcje?")
         while True:
-            print("""Wyswietl stan magazynu - wpisz: 1
+            print("""\nWyswietl stan magazynu - wpisz: 1
 Dodaj nowy produkt - wpisz: 2
 Wykresl produkt z magazynu - wpisz: 3
 Wroc do menu glownego - wpisz: 4""")
+            #dodac odnajdywanie produktow
             wybor2=input()
             wybor2 = wybor2.lower()
             if wybor2=="1":
@@ -64,12 +65,16 @@ Wroc do menu glownego - wpisz: 4""")
                 powrot=input('Powrot do menu "Stan magazynu" - wybierz "Q":   ')
             if wybor2 == "2":
                 while True:
-                    produkt1 = input("Wpisz nazwe nowego produktu:  ")
+                    produkt1 = input("\nWpisz nazwe nowego produktu:  ")
                     ilosc = input("Wpisz ilosc produktu:   ")
+                    ilosc = float(ilosc)
                     cena = input("Wpisz cene produktu:  ")
-                    stan_magazynu[produkt1] = ilosc, cena
+                    cena = float(cena)
+                    wartosc = ilosc * cena
+                    wartosc = float(wartosc)
+                    stan_magazynu[produkt1] = ilosc, cena, wartosc
                     print(stan_magazynu)
-                    print("Czy chcesz wprowadzic kolejny produkt? t/n")
+                    print("\nCzy chcesz wprowadzic kolejny produkt? t/n")
                     odp2 = input()
                     odp2 = odp2.lower()
                     if odp2 == "t":
@@ -82,11 +87,11 @@ Wroc do menu glownego - wpisz: 4""")
                         continue
             if wybor2 == "3":
                 while True:
-                    produkt2 = input("Wpisz nazwe nowego produktu do wykreslenia:  ")
+                    produkt2 = input("\nWpisz nazwe nowego produktu do wykreslenia:  ")
                     #moze dac pytanie "Czy na pewno chcesz wykreslic?"
                     del stan_magazynu[produkt2]
                     print(stan_magazynu)
-                    print("Czy chcesz wykreslic kolejny produkt? t/n")
+                    print("\nCzy chcesz wykreslic kolejny produkt? t/n")
                     odp3 = input()
                     odp3 = odp3.lower()
                     if odp2 == "t":

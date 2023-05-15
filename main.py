@@ -49,6 +49,8 @@ while True:
                 continue
     if wybor=="2":
         print("Saldo magazynu")
+        wartosc_zapasow=stan_magazynu[wartosc]
+        print(wartosc_zapasow)
     if wybor=="3":
         print("Stan magazynu")
         print("Wybierz opcje?")

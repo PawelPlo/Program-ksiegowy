@@ -15,8 +15,8 @@ print("Aktualny stan konta wynosi:{} zl.\n".format(konto))
 while True:
     print('''Wybierz opcje:
     Linia kredytowa - wpisz: 1
-    Saldo i operacje na koncie - wpisz: 2
-    Stan magazynu (dane calosciowe) - wpisz: 3
+    Saldo, stan konta i operacje gotowkowe - wpisz: 2
+    Stan magazynu (dane calosciowe, wprowadzanie i wykreslanie towarow) - wpisz: 3
     Znajdz produkt w magazynie - wpisz: 4
     Sprzedaz - wpisz: 5
     Zakup - wpisz: 6
@@ -106,7 +106,32 @@ Wroc do menu glownego - wpisz: 4""")
                 break
                 wybor = input()
     if wybor=="4":
-        print("Wpisz nazwe produktu")
+        while True:
+            szukana=input("Wpisz szukany towar:  ")
+            if szukana in stan_magazynu:
+                print(szukana, stan_magazynu[szukana])
+                powrot = input("Czy chcesz szukac innego towaru? t/n:    ")
+                powrot = powrot.lower()
+                if powrot == "t":
+                    continue
+                elif powrot == "n":
+                    break
+                    wybor = input()
+                else:
+                    print("Wybrales zla opcje")
+                    continue
+            if szukana not in stan_magazynu:
+                odp4=input("""W magazynie nie odnaleziono takiego towaru!
+Czy chcesz szukac innego towaru? t/n:    """)
+                odp4 = odp4.lower()
+                if odp4=="t":
+                    continue
+                elif odp4=="n":
+                    break
+                    wybor = input()
+                else:
+                    print("Wybrales zla opcje")
+                    continue
     if wybor=="5":
         print("Sprzedaz")
     if wybor=="6":

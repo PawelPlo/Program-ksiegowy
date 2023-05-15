@@ -4,6 +4,7 @@ konto=0
 konto=float(konto)
 linia_kredytowa = 0
 linia_kredytowa = float(linia_kredytowa)
+stan_magazynu = dict()
 #zmienic potem debet na zmienna
 debet = 100
 print("     Program księgowy      \n")
@@ -22,6 +23,7 @@ while True:
     Historia zdarzen - wpisz: 7
     Wyjscie z programu - wpisz: "koniec"''')
     wybor=input()
+    #wpisac zabezpieczenie przed bledem
     if wybor=="1":
         print("Linia kredytowa")
         print("Linia kredytowa wynosi {} zl".format(linia_kredytowa))
@@ -49,6 +51,55 @@ while True:
         print("Saldo magazynu")
     if wybor=="3":
         print("Stan magazynu")
+        print("Wybierz opcje?")
+        while True:
+            print("""Wyswietl stan magazynu - wpisz: 1
+Dodaj nowy produkt - wpisz: 2
+Wykresl produkt z magazynu - wpisz: 3
+Wroc do menu glownego - wpisz: 4""")
+            wybor2=input()
+            wybor2 = wybor2.lower()
+            if wybor2=="1":
+                print(stan_magazynu)
+                powrot=input('Powrot do menu "Stan magazynu" - wybierz "Q":   ')
+            if wybor2 == "2":
+                while True:
+                    produkt1 = input("Wpisz nazwe nowego produktu:  ")
+                    ilosc = input("Wpisz ilosc produktu:   ")
+                    cena = input("Wpisz cene produktu:  ")
+                    stan_magazynu[produkt1] = ilosc, cena
+                    print(stan_magazynu)
+                    print("Czy chcesz wprowadzic kolejny produkt? t/n")
+                    odp2 = input()
+                    odp2 = odp2.lower()
+                    if odp2 == "t":
+                        continue
+                    elif odp2 == "n":
+                        break
+                        wybor2 = input()
+                    else:
+                        print("Wybrales zla opcje")
+                        continue
+            if wybor2 == "3":
+                while True:
+                    produkt2 = input("Wpisz nazwe nowego produktu do wykreslenia:  ")
+                    #moze dac pytanie "Czy na pewno chcesz wykreslic?"
+                    del stan_magazynu[produkt2]
+                    print(stan_magazynu)
+                    print("Czy chcesz wykreslic kolejny produkt? t/n")
+                    odp3 = input()
+                    odp3 = odp3.lower()
+                    if odp2 == "t":
+                        continue
+                    elif odp2 == "n":
+                        break
+                        wybor2 = input()
+                    else:
+                        print("Wybrales zla opcje")
+                        continue
+            if wybor2 == "4":
+                break
+                wybor = input()
     if wybor=="4":
         print("Wpisz nazwe produktu")
     if wybor=="5":

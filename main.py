@@ -7,6 +7,11 @@ linia_kredytowa = float(linia_kredytowa)
 stan_magazynu = dict()
 #zmienic potem debet na zmienna
 debet = 100
+def zapasy(stan_magazynu):
+    suma = 0
+    for v in stan_magazynu.values():
+        suma += v["wartosc"]
+    return suma
 print("     Program księgowy      \n")
 print("Aktualny stan konta wynosi:{} zl.\n".format(konto))
 
@@ -49,8 +54,9 @@ while True:
                 continue
     if wybor=="2":
         print("Saldo magazynu")
-        wartosc_zapasow=stan_magazynu[wartosc]
+        wartosc_zapasow=zapasy(stan_magazynu)
         print(wartosc_zapasow)
+
     if wybor=="3":
         print("Stan magazynu")
         print("Wybierz opcje?")

@@ -1,20 +1,25 @@
-#import pprint
+#program ksiegowy
+
+#zmienne do czesci 1 i 2 (Obsluga kredytow i saldo, stan konta, operacje gotowkowe)
 saldo=0
 konto=0
 konto=float(konto)
 zadluzenie = 0
 zadluzenie = float(zadluzenie)
 
+#zmienne i funkcje do stanu magazynu
 stan_magazynu = dict()
-
-
 def zapasy(stan_magazynu):
     suma = 0
     for v in stan_magazynu.values():
         suma += v["wartosc"]
     return suma
+
+#zmienne do historii zdarzen
 historia = []
 historia_index=0
+
+
 print("     Program księgowy      \n")
 print("Aktualny stan konta wynosi:{} zl.\n".format(konto))
 
@@ -99,8 +104,7 @@ Powrot do menu glownego - wpisz: 3""")
 #rozwinac wybor2
     if wybor=="3":
         while True:
-            print("Stan magazynu\n")
-            print("Wybierz opcje?")
+            print("Stan magazynu - wybierz opcje")
             print("""\nWyswietl stan magazynu - wpisz: 1
 Dodaj nowy produkt - wpisz: 2
 Wykresl produkt z magazynu - wpisz: 3
@@ -110,6 +114,7 @@ Wroc do menu glownego - wpisz: 4""")
             if wybor3=="1":
                 print(stan_magazynu)
                 powrot=input('Powrot do menu "Stan magazynu" - wybierz "Q":   ')
+                wybor == "3"
             if wybor3 == "2":
                 while True:
                     produkt = input("\nWpisz nazwe nowego produktu:  ")
@@ -121,6 +126,10 @@ Wroc do menu glownego - wpisz: 4""")
                     wartosc = float(wartosc)
                     stan_magazynu[produkt] = {"ilosc": ilosc, "cena": cena, "wartosc": wartosc}
                     print("Wprowadzono towar :{}, w ilosci: {}, w cenie: {}, laczna wartosc: {}".format(produkt, ilosc, cena, wartosc))
+                    historia_index = historia_index + 1
+                    wpis_3_1 = ("{}. Wprowadzono do magazynu {}, w ilosci {}, po cenie {} zl"
+                                .format(historia_index, produkt, ilosc, cena))
+                    historia.append(wpis_3_1)
                     print("\nCzy chcesz wprowadzic kolejny produkt? t/n")
                     odp2 = input()
                     odp2 = odp2.lower()
@@ -135,20 +144,31 @@ Wroc do menu glownego - wpisz: 4""")
             if wybor3 == "3":
                 while True:
                     produkt = input("\nWpisz nazwe nowego produktu do wykreslenia:  ")
-#moze dac pytanie "Czy na pewno chcesz wykreslic?"
-                    del stan_magazynu[produkt]
-                    print(stan_magazynu)
-                    print("\nCzy chcesz wykreslic kolejny produkt? t/n")
-                    odp3 = input()
-                    odp3 = odp3.lower()
-                    if odp3 == "t":
+                    if produkt not in stan_magazynu:
                         continue
-                    elif odp3 == "n":
-                        break
-                        wybor3 = input()
-                    else:
-                        print("Wybrales zla opcje")
-                        continue
+                    if produkt in stan_magazynu:
+                        print(stan_magazynu[produkt])
+                        potwierdzenie=input("\nCzy na pewno chcesz wykrelic ten produkt? t/n   ")
+                        potwierdzenie=potwierdzenie.lower()
+                        if potwierdzenie == "t":
+                            historia_index = historia_index + 1
+                            wpis_3_2 = ("{}. Ze stanu magazynu magazynu zdjeto {} - {}"
+                            .format(historia_index, produkt, stan_magazynu[produkt]))
+                            historia.append(wpis_3_2)
+                            del stan_magazynu[produkt]
+                            print("\nCzy chcesz wykreslic kolejny produkt? t/n")
+                            odp3 = input()
+                            odp3 = odp3.lower()
+                            if odp3 == "t":
+                                continue
+                            if odp3 == "n":
+                                break
+                                wybor==3
+                        if potwierdzenie == "n":
+                            continue
+                        else:
+                            print("Wybrales zla opcje")
+                            continue
             if wybor3 == "4":
                 break
                 wybor = input()
@@ -182,7 +202,48 @@ Czy chcesz szukac innego towaru? t/n:    """)
     if wybor=="5":
         print("Sprzedaz")
     if wybor=="6":
-        print("Zakup towarow")
+        while True:
+            print("Zakup towarow. Aktualny stan konta wynosi {} zl\n".format(konto))
+            print("""Zakup towaru wystepujacego juz w magazynie - wpisz: 1
+Zakup towaru nie wystepujacego dotad w magazynie - wpisz: 2
+Powrot do menu glownego - wpisz: 3""")
+            wybor_towaru = input()
+            if wybor_towaru == "1":
+                pass
+            if wybor_towaru == "2":
+                # produkt = input("\nWpisz nazwe nowego produktu:  ")
+                # ilosc = input("Wpisz ilosc produktu:   ")
+                # ilosc = float(ilosc)
+                # cena = input("Wpisz cene produktu:  ")
+                # cena = float(cena)
+                # wartosc = ilosc * cena
+                # wartosc = float(wartosc)
+                # if wartosc > konto:
+                #     print("Nie masz wystarczajcych srodkow na koncie")
+                #     wybor_towaru = input()
+                # else:
+                #     stan_magazynu[produkt] = {"ilosc": ilosc, "cena": cena, "wartosc": wartosc}
+                #     print(
+                #         "Wprowadzono towar :{}, w ilosci: {}, w cenie: {}, laczna wartosc: {}".format(produkt, ilosc, cena,
+                #                                                                                       wartosc))
+                #     historia_index = historia_index + 1
+                #     wpis_3_1 = ("{}. Wprowadzono do magazynu {}, w ilosci {}, po cenie {} zl"
+                #                 .format(historia_index, produkt, ilosc, cena))
+                #     historia.append(wpis_3_1)
+                #     print("\nCzy chcesz wprowadzic kolejny produkt? t/n")
+                #     odp2 = input()
+                #     odp2 = odp2.lower()
+                #     if odp2 == "t":
+                #         continue
+                #     elif odp2 == "n":
+                #         break
+                #         wybor3 = input()
+                #     else:
+                #         print("Wybrales zla opcje")
+                #         continue
+            if wybor_towaru == "3":
+                break
+                wybor = input()
     if wybor=="7":
         while True:
             print("Historia zdarzen\n")

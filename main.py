@@ -224,20 +224,21 @@ Powrot do menu glownego - wpisz: 3""")
                 # else:
                 #     stan_magazynu[produkt] = {"ilosc": ilosc, "cena": cena, "wartosc": wartosc}
                 #     print(
-                #         "Wprowadzono towar :{}, w ilosci: {}, w cenie: {}, laczna wartosc: {}".format(produkt, ilosc, cena,
-                #                                                                                       wartosc))
+                #         "Wprowadzono towar :{}, w ilosci: {}, w cenie: {}, laczna wartosc: {}".
+            #         format(produkt, ilosc, cena, wartosc))
                 #     historia_index = historia_index + 1
-                #     wpis_3_1 = ("{}. Wprowadzono do magazynu {}, w ilosci {}, po cenie {} zl"
+                #     wpis_3_1 = ("{}. Zakupiono {}, w ilosci {}, po cenie {} zl"
                 #                 .format(historia_index, produkt, ilosc, cena))
                 #     historia.append(wpis_3_1)
-                #     print("\nCzy chcesz wprowadzic kolejny produkt? t/n")
-                #     odp2 = input()
-                #     odp2 = odp2.lower()
-                #     if odp2 == "t":
+                #     konto - wartosc
+                #     print("\nCzy chcesz zakupic kolejny produkt? t/n")
+                #     odp6 = input()
+                #     odp6 = odp6.lower()
+                #     if odp6 == "t":
                 #         continue
-                #     elif odp2 == "n":
+                #     elif odp6 == "n":
                 #         break
-                #         wybor3 = input()
+                #         wybor6 = input()
                 #     else:
                 #         print("Wybrales zla opcje")
                 #         continue

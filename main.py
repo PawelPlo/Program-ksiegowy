@@ -2,11 +2,12 @@
 saldo=0
 konto=0
 konto=float(konto)
-linia_kredytowa = 0
-linia_kredytowa = float(linia_kredytowa)
+zadluzenie = 0
+zadluzenie = float(zadluzenie)
+
 stan_magazynu = dict()
-#zmienic potem debet na zmienna
-debet = 100
+
+
 def zapasy(stan_magazynu):
     suma = 0
     for v in stan_magazynu.values():
@@ -19,7 +20,7 @@ print("Aktualny stan konta wynosi:{} zl.\n".format(konto))
 
 while True:
     print('''Wybierz opcje:
-    Linia kredytowa - wpisz: 1
+    Obsluga kredytow - wpisz: 1
     Saldo, stan konta i operacje gotowkowe - wpisz: 2
     Stan magazynu (dane calosciowe, wprowadzanie i wykreslanie towarow) - wpisz: 3
     Znajdz produkt w magazynie - wpisz: 4
@@ -28,25 +29,38 @@ while True:
     Historia zdarzen - wpisz: 7
     Wyjscie z programu - wpisz: "koniec"''')
     wybor=input()
-#wpisac zabezpieczenie przed bledem
     if wybor=="1":
-        print("Linia kredytowa")
-        print("Linia kredytowa wynosi {} zl".format(linia_kredytowa))
-        print("Dostepna linia kredytowa wynosi {} zl".format(linia_kredytowa-debet))
-        print("Aktualny stan zadluzenia wynosi {} zl".format(debet))
         while True:
-            print("Czy chcesz wprowadzic wartosc udzielonego kredytu? t/n")
-            print("n - powrot do glownego menu")
+            print("Obsluga kredytow - Aktualny stan zadluzenia wynosi {} zl\n".format(zadluzenie))
+            print("""Wprowadzenie wartosci uruchomionego kredytu - wpisz: 1
+Splata kredytu - wpisz: 2
+Powrot do glownego menu  - wpisz: 3""")
             odp1=input()
-            odp1 = odp1.lower()
-            if odp1=="t":
-                kredyt = input("Wpisz wartosc udzielonego kredytu obrotowego:")
+            if odp1=="1":
+                kredyt = input("Wpisz wartosc udzielonego Ci kredytu:")
                 kredyt = float(kredyt)
-                linia_kredytowa += kredyt
-                print("Linia kredytowa wynosi {} zl".format(linia_kredytowa))
-                print("Dostepna linia kredytowa wynosi {} zl".format(linia_kredytowa - debet))
-                print("Aktualny stan zadluzenia wynosi {} zl".format(debet))
-            elif odp1=="n":
+                zadluzenie += kredyt
+                print("Stan zadluzenia po zmianie wynosi {} zl".format(zadluzenie))
+                historia_index = historia_index + 1
+                wpis_1_1 = ("{}. Zaciagniety kredyt w wysokosci: {} zl".format(historia_index, kredyt))
+                historia.append(wpis_1_1)
+                konto = konto + kredyt
+                continue
+            if odp1=="2":
+                kredyt = input("Wpisz kwote splaconego kredytu:")
+                kredyt = float(kredyt)
+                if kredyt > konto:
+                    print("Nie masz wystarczajacych srodkow na koncie\n\n")
+                    continue
+                    wybor == "1"
+                if kredyt <= konto:
+                    zadluzenie -= kredyt
+                    print("Stan zadluzenia po zmianie wynosi {} zl\n".format(zadluzenie))
+                    historia_index = historia_index + 1
+                    wpis_1_2 = ("{}. Splata kredytu w wysokosci: {} zl".format(historia_index, kredyt))
+                    historia.append(wpis_1_2)
+                    continue
+            if odp1=="3":
                 break
                 wybor = input()
             else:
@@ -58,8 +72,9 @@ while True:
             wartosc_zapasow=zapasy(stan_magazynu)
             print("Wartosc towarow w magazynie wynosi: {} zl".format(wartosc_zapasow))
             print("Stan konta: {} zl".format(konto))
-            print("Wysokosc zadluzenia wynosi {} zl".format(debet))
-            print("Saldo firmy pomniejszone o wysokosc zadluzenia wynosi {} zl\n".format(wartosc_zapasow+konto-debet))
+            print("Wysokosc zadluzenia wynosi {} zl".format(zadluzenie))
+            print("Saldo firmy pomniejszone o wysokosc zadluzenia wynosi {} zl\n"
+                  .format(wartosc_zapasow+konto-zadluzenie))
             print("""Jesli chcesz wplacic srodki na konto - wpisz: 1
 Jesli chcesz wyplacic srodki z konta - wpisz: 2
 Powrot do menu glownego - wpisz: 3""")
@@ -198,7 +213,13 @@ Powrot do glownego menu - wpisz: 3""")
             if wybor7 == "3":
                 break
                 wybor = input()
+            else:
+                print("Wybrales zla opcje")
+                continue
     if wybor=="koniec":
         break
+    else:
+        print("Wybrales zla opcje")
+        continue
 
 

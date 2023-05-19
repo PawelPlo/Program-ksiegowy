@@ -34,6 +34,7 @@ while True:
     Historia zdarzen - wpisz: 7
     Wyjscie z programu - wpisz: "koniec"''')
     wybor=input()
+
     if wybor=="1":
         while True:
             print("Obsluga kredytow - Aktualny stan zadluzenia wynosi {} zl\n".format(zadluzenie))
@@ -42,52 +43,63 @@ Splata kredytu - wpisz: 2
 Powrot do glownego menu  - wpisz: 3""")
             odp1=input()
             if odp1=="1":
-                kredyt = input("Wpisz wartosc udzielonego Ci kredytu:")
+                kredyt = input("Wpisz wartosc udzielonego Ci kredytu:  \n")
+                if not kredyt.isdigit():
+                    print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
+                    continue
                 kredyt = float(kredyt)
                 zadluzenie += kredyt
-                print("Stan zadluzenia po zmianie wynosi {} zl".format(zadluzenie))
+                print("Stan zadluzenia po zmianie wynosi {} zl\n\n".format(zadluzenie))
                 historia_index = historia_index + 1
                 wpis_1_1 = ("{}. Zaciagniety kredyt w wysokosci: {} zl".format(historia_index, kredyt))
                 historia.append(wpis_1_1)
                 konto = konto + kredyt
                 continue
+                odp1 = input()
             if odp1=="2":
-                kredyt = input("Wpisz kwote splaconego kredytu:")
-                kredyt = float(kredyt)
-                if kredyt > konto:
+                splata = input("Wpisz kwote splaconego kredytu:")
+                if not splata.isdigit():
+                    print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
+                    continue
+                splata = float(splata)
+                if splata > konto:
                     print("Nie masz wystarczajacych srodkow na koncie\n\n")
                     continue
                     wybor == "1"
-                if kredyt <= konto:
-                    zadluzenie -= kredyt
-                    konto = konto - kredyt
+                if splata <= konto:
+                    zadluzenie -= splata
+                    konto = konto - splata
                     print("Stan zadluzenia po zmianie wynosi {} zl\n".format(zadluzenie))
                     historia_index = historia_index + 1
-                    wpis_1_2 = ("{}. Splata kredytu w wysokosci: {} zl".format(historia_index, kredyt))
+                    wpis_1_2 = ("{}. Splata kredytu w wysokosci: {} zl".format(historia_index, splata))
                     historia.append(wpis_1_2)
                     continue
             if odp1=="3":
                 break
                 wybor = input()
             else:
-                print("Wybrales zla opcje")
+                print("Wybrales zla opcje!\n")
                 continue
     if wybor=="2":
         while True:
-            print("Saldo magazynu\n")
+            print("Saldo magazynu, stan konta i operacje gotowkowe\n")
             wartosc_zapasow=zapasy(stan_magazynu)
             print("Wartosc towarow w magazynie wynosi: {} zl".format(wartosc_zapasow))
             print("Stan konta: {} zl".format(konto))
-            print("Wysokosc zadluzenia wynosi {} zl".format(zadluzenie))
-            print("Saldo firmy pomniejszone o wysokosc zadluzenia wynosi {} zl\n"
+            print("Wysokosc zadluzenia wynosi: {} zl".format(zadluzenie))
+            print("Saldo firmy (aktywa - pasywa) wynosi: {} zl\n"
                   .format(wartosc_zapasow+konto-zadluzenie))
+            print("Wybierz opcje:\n")
             print("""Jesli chcesz wplacic srodki na konto - wpisz: 1
 Jesli chcesz wyplacic srodki z konta - wpisz: 2
-Powrot do menu glownego - wpisz: 3""")
+Powrot do menu glownego - wpisz: 3\n""")
             wybor2=input()
             if wybor2=="1":
                 wplata=input("Podaj kwote wplaty na konto w PLN:   ")
-                wplata=int(wplata)
+                if not wplata.isdigit():
+                    print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
+                    continue
+                wplata=float(wplata)
                 konto = konto+wplata
                 print("\nStan konta wynosi: {}".format(konto))
                 historia_index=historia_index + 1
@@ -95,21 +107,35 @@ Powrot do menu glownego - wpisz: 3""")
                 historia.append(wpis_2)
                 continue
             if wybor2=="2":
-                pass
+                wyplata = input("Podaj kwote do wyplacenia z konta w PLN:   ")
+                if not wyplata.isdigit():
+                    print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
+                    continue
+                wyplata = float(wyplata)
+                if wyplata > konto:
+                    print("Nie masz wystarczajaco srodkow na koncie!\n")
+                    continue
+                if wyplata < konto:
+                    konto = konto - wyplata
+                    print("\nStan konta wynosi: {}".format(konto))
+                    historia_index = historia_index + 1
+                    wpis_2 = ("{}. Wyplata z konta: {} zl\n".format(historia_index, wyplata))
+                    historia.append(wpis_2)
+                    continue
             if wybor2 == "3":
                 break
                 wybor = input()
             else:
-                print("Wybrales zla opcje")
+                print("Wybrales zla opcje\n")
                 continue
-#rozwinac wybor2
+
     if wybor=="3":
         while True:
             print("Stan magazynu - wybierz opcje")
             print("""\nWyswietl stan magazynu - wpisz: 1
 Dodaj nowy produkt - wpisz: 2
 Wykresl produkt z magazynu - wpisz: 3
-Wroc do menu glownego - wpisz: 4""")
+Wroc do menu glownego - wpisz: 4\n""")
             wybor3=input()
             wybor3 = wybor3.lower()
             if wybor3=="1":
@@ -118,10 +144,17 @@ Wroc do menu glownego - wpisz: 4""")
                 wybor == "3"
             if wybor3 == "2":
                 while True:
-                    produkt = input("\nWpisz nazwe nowego produktu:  ")
+                    produkt = input("\nWpisz nazwe nowego produktu:  ").strip()
+                    produkt = produkt.lower()
                     ilosc = input("Wpisz ilosc produktu:   ")
+                    if not ilosc.isdigit():
+                        print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
+                        continue
                     ilosc = float(ilosc)
                     cena = input("Wpisz cene produktu:  ")
+                    if not cena.isdigit():
+                        print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
+                        continue
                     cena = float(cena)
                     wartosc = ilosc * cena
                     wartosc = float(wartosc)
@@ -140,14 +173,15 @@ Wroc do menu glownego - wpisz: 4""")
                         break
                         wybor3 = input()
                     else:
-                        print("Wybrales zla opcje")
+                        print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                         continue
             if wybor3 == "3":
                 while True:
-                    produkt = input("\nWpisz nazwe nowego produktu do wykreslenia:  ")
+                    produkt = input("\nWpisz nazwe nowego produktu do wykreslenia:  ").strip()
+                    produkt = produkt.lower()
                     if produkt not in stan_magazynu:
                         print("Nie ma takiego produktu w magazynie")
-                        print("\nCzy chcesz wykreslic kolejny produkt? t/n")
+                        print("\nCzy chcesz wykreslic inny produkt? t/n")
                         odp3_1 = input()
                         odp3_1 = odp3_1.lower()
                         if odp3_1 == "t":
@@ -172,18 +206,23 @@ Wroc do menu glownego - wpisz: 4""")
                                 continue
                             if odp3_2 == "n":
                                 break
-                                wybor==3
+                                wybor3 = input()
                         if potwierdzenie == "n":
-                            continue
+                            break
+                            wybor3 = input()
                         else:
-                            print("Wybrales zla opcje")
+                            print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                             continue
             if wybor3 == "4":
                 break
                 wybor = input()
+            else:
+                print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
+                continue
     if wybor=="4":
         while True:
-            szukana=input("Wpisz szukany towar:  ")
+            szukana=input("Wpisz szukany towar:  ").strip()
+            szukana = szukana.lower()
             if szukana in stan_magazynu:
                 print(szukana, stan_magazynu[szukana])
                 powrot4 = input("Czy chcesz szukac innego towaru? t/n:    ")
@@ -192,9 +231,9 @@ Wroc do menu glownego - wpisz: 4""")
                     continue
                 elif powrot4 == "n":
                     break
-                    wybor4 = input()
+                    wybor = input()
                 else:
-                    print("Wybrales zla opcje")
+                    print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                     continue
             if szukana not in stan_magazynu:
                 odp4=input("""W magazynie nie odnaleziono takiego towaru!
@@ -206,7 +245,7 @@ Czy chcesz szukac innego towaru? t/n:    """)
                     break
                     wybor = input()
                 else:
-                    print("Wybrales zla opcje")
+                    print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                     continue
     if wybor=="5":
         while True:
@@ -214,7 +253,8 @@ Czy chcesz szukac innego towaru? t/n:    """)
 Wroc do menu glownego - wpisz: 2""")
             odp_5 = input()
             if odp_5 == "1":
-                przedmiot_sprzadazy = input("Podaj nazwe towaru do sprzedazy:   ")
+                przedmiot_sprzadazy = input("Podaj nazwe towaru do sprzedazy:   ").strip()
+                przedmiot_sprzadazy = przedmiot_sprzadazy.lower()
                 if przedmiot_sprzadazy not in stan_magazynu:
                     print("Takiego towaru nie ma magazynie. Powrot do menu\n")
                     continue
@@ -223,8 +263,14 @@ Wroc do menu glownego - wpisz: 2""")
                     print("Aktualny stan w magazynie:\n")
                     print(przedmiot_sprzadazy, stan_magazynu[przedmiot_sprzadazy])
                     ilosc_sprzedawana = input("Podaj ilosc sprzedawanego towaru:   ")
+                    if not ilosc_sprzedawana.isdigit():
+                        print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
+                        continue
                     ilosc_sprzedawana = float(ilosc_sprzedawana)
                     cena_sprzedazy = input("Podaj cene sprzedazy:   ")
+                    if not cena_sprzedazy.isdigit():
+                        print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
+                        continue
                     cena_sprzedazy = float(cena_sprzedazy)
                     wartosc_sprzedazy = ilosc_sprzedawana * cena_sprzedazy
                     wartosc_sprzedazy = float(wartosc_sprzedazy)
@@ -242,16 +288,17 @@ Wroc do menu glownego - wpisz: 2""")
                             .format(historia_index, przedmiot_sprzadazy, ilosc_sprzedawana, cena_sprzedazy))
                             historia.append(wpis_5_1)
                             konto = konto + wartosc_sprzedazy
+                            print("Sprzedales {} za laczno kwote {} zl".format(przedmiot_sprzadazy, wartosc_sprzedazy))
                             print("\nCzy chcesz sprzedac kolejny produkt? t/n")
                             odp5_1 = input()
                             odp5_1 = odp5_1.lower()
                             if odp5_1 == "t":
-                                continue
+                                przedmiot_sprzadazy = input("Podaj nazwe towaru do sprzedazy:   ").strip()
                             elif odp5_1 == "n":
                                 break
                                 odp_5 = input()
                             else:
-                                print("Wybrales zla opcje")
+                                print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                                 continue
                         if cena_sprzedazy != stan_magazynu[przedmiot_sprzadazy]["cena"]:
                             stan_magazynu[przedmiot_sprzadazy]["ilosc"] -= ilosc_sprzedawana
@@ -259,12 +306,17 @@ Wroc do menu glownego - wpisz: 2""")
                             stan_magazynu[przedmiot_sprzadazy]["wartosc"] -= stara_wartosc
                             print("Aktualny stan w magazynie:", przedmiot_sprzadazy, stan_magazynu[przedmiot_sprzadazy])
                             zysk = wartosc_sprzedazy - stara_wartosc
-                            print("Ze sprzedazy {} osignales zysk w wysokości {} zl.".format(przedmiot_sprzadazy, zysk))
                             historia_index = historia_index + 1
                             wpis_5_2 = ("{}. Sprzedano {}, w ilosci {}, po cenie {} zl"
                             .format(historia_index, przedmiot_sprzadazy, ilosc_sprzedawana, cena_sprzedazy))
                             historia.append(wpis_5_2)
                             konto = konto + wartosc_sprzedazy
+                            if zysk > 0:
+                                print("Ze sprzedazy {} osignales zysk w wysokości {} zl."
+                                .format(przedmiot_sprzadazy, zysk))
+                            if zysk < 0:
+                                print("Sprzedaz {} zakonczyla sie strata w wysokości {} zl."
+                                .format(przedmiot_sprzadazy,zysk))
                             print("\nCzy chcesz sprzedac kolejny produkt? t/n")
                             odp5_2 = input()
                             odp5_2 = odp5_2.lower()
@@ -274,13 +326,13 @@ Wroc do menu glownego - wpisz: 2""")
                                 break
                                 odp_5 = input()
                             else:
-                                print("Wybrales zla opcje")
+                                print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                                 continue
             if odp_5 == "2":
                 break
                 wybor = input()
             else:
-                print("Wybrales zla opcje")
+                print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                 continue
     if wybor=="6":
         while True:
@@ -290,27 +342,34 @@ Zakup towaru nie wystepujacego dotad w magazynie - wpisz: 2
 Powrot do menu glownego - wpisz: 3""")
             opcja_zakupu = input()
             if opcja_zakupu == "1":
-                zakup = input("\nWpisz nazwe towaru:  ")
+                zakup = input("\nWpisz nazwe towaru:  ").strip()
+                zakup = zakup.lower()
                 if zakup not in stan_magazynu:
-                    print("Takiego towaru nie ma magazynie. Powrot do menu\n")
+                    print("Takiego towaru nie ma magazynie. Sproboj jeszcze raz lub sprawdz stan magazynu\n")
                     continue
                     opcja_zakupu = input()
                 if zakup in stan_magazynu:
                     print("Aktualny stan w magazynie:\n")
                     print(zakup, stan_magazynu[zakup])
                     ilosc_kupowana = input("Podaj ilosc kupowanego towaru:   ")
+                    if not ilosc_kupowana.isdigit():
+                        print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
+                        continue
                     ilosc_kupowana = float(ilosc_kupowana)
                     cena_kupna = input("Podaj cene kupna:   ")
+                    if not cena_kupna.isdigit():
+                        print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
+                        continue
                     cena_kupna = float(cena_kupna)
                     wartosc_zakupu = ilosc_kupowana * cena_kupna
                     wartosc_zakupu = float(wartosc_zakupu)
                     if wartosc_zakupu > konto:
-                        print("Nie masz wystarczajcych srodkow na koncie\n")
+                        print("\nNie masz wystarczajcych srodkow na koncie! Sproboj jeszcze raz.\n")
                         continue
                         opcja_zakupu = input()
                     else:
                         if cena_kupna != stan_magazynu[zakup]["cena"]:
-                            print("{} w magazynie ma inna cene. Wprowadz kupowany towar jako nowa pozycja w magazynie"
+                            print("{} w magazynie ma inna cene. Wprowadz kupowany towar jako nowa pozycja w magazynie\n"
                             .format(zakup))
                             continue
                             opcja_zakupu = input()
@@ -332,18 +391,25 @@ Powrot do menu glownego - wpisz: 3""")
                                 break
                                 wybor6 = input()
                             else:
-                                print("Wybrales zla opcje")
+                                print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                                 continue
             if opcja_zakupu == "2":
-                produkt = input("\nWpisz nazwe nowego produktu:  ")
+                produkt = input("\nWpisz nazwe nowego produktu:  ").strip()
+                produkt = produkt.lower()
                 if produkt in stan_magazynu:
                     print("Taki towar znajduje sie juz w magazynie. Powrot do menu\n")
                     continue
                     opcja_zakupu = input()
                 if produkt not in stan_magazynu:
                     ilosc = input("Wpisz ilosc produktu:   ")
+                    if not ilosc.isdigit():
+                        print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
+                        continue
                     ilosc = float(ilosc)
                     cena = input("Wpisz cene produktu:  ")
+                    if not cena.isdigit():
+                        print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
+                        continue
                     cena = float(cena)
                     wartosc = ilosc * cena
                     wartosc = float(wartosc)
@@ -369,7 +435,7 @@ Powrot do menu glownego - wpisz: 3""")
                             break
                             wybor6 = input()
                         else:
-                            print("Wybrales zla opcje")
+                            print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                             continue
             if opcja_zakupu == "3":
                 break
@@ -393,24 +459,33 @@ Powrot do glownego menu - wpisz: 3""")
                     wybor7 = input()
             if wybor7 == "2":
                 od=input("Wprowadz poczatkowy numer z listy:   ")
+                if not od.isdigit():
+                    print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
+                    continue
                 od = int(od)
                 od = od-1
-                do=input("Wprowadz koncowy numer z listy:    ")
+                do=input("Wprowadz koncowy numer z listy:    \n")
+                if not do.isdigit():
+                    print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
+                    continue
                 do = int(do)
-                do=do+1
+                if od > len(historia) or do > len(historia):
+                    print("Wybrales liczby spoza zakresu listy. Sproboj jeszcze raz.\n\n")
+                    continue
                 for zakres in range(od, do):
                     print(historia[zakres])
-                powrot7=input('Powrot do menu "Historia zdarzen" - wpisz: "q"')
+                powrot7=input('Powrot do menu "Historia zdarzen" - wpisz: "q"\n\n')
+                continue
             if wybor7 == "3":
                 break
                 wybor = input()
             else:
-                print("Wybrales zla opcje")
+                print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                 continue
     if wybor=="koniec":
         break
     else:
-        print("Wybrales zla opcje")
+        print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
         continue
 
 

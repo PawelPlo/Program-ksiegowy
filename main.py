@@ -19,11 +19,9 @@ def zapasy(stan_magazynu):
 historia = []
 historia_index=0
 
-
-print("     Program księgowy      \n")
-print("Aktualny stan konta wynosi:{} zl.\n".format(konto))
-
 while True:
+    print("     Program księgowy      \n")
+    print("Aktualny stan konta wynosi:{} zl.\n".format(konto))
     print('''Wybierz opcje:
     Obsluga kredytow - wpisz: 1
     Saldo, stan konta i operacje gotowkowe - wpisz: 2
@@ -34,6 +32,7 @@ while True:
     Historia zdarzen - wpisz: 7
     Wyjscie z programu - wpisz: "koniec"''')
     wybor=input()
+
 
     if wybor=="1":
         while True:
@@ -80,6 +79,8 @@ Powrot do glownego menu  - wpisz: 3""")
             else:
                 print("Wybrales zla opcje!\n")
                 continue
+
+
     if wybor=="2":
         while True:
             print("Saldo magazynu, stan konta i operacje gotowkowe\n")
@@ -128,6 +129,7 @@ Powrot do menu glownego - wpisz: 3\n""")
             else:
                 print("Wybrales zla opcje\n")
                 continue
+
 
     if wybor=="3":
         while True:
@@ -219,6 +221,8 @@ Wroc do menu glownego - wpisz: 4\n""")
             else:
                 print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                 continue
+
+
     if wybor=="4":
         while True:
             szukana=input("Wpisz szukany towar:  ").strip()
@@ -247,6 +251,8 @@ Czy chcesz szukac innego towaru? t/n:    """)
                 else:
                     print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                     continue
+
+
     if wybor=="5":
         while True:
             print("""Sprzedaz - wpisz: 1
@@ -334,6 +340,8 @@ Wroc do menu glownego - wpisz: 2""")
             else:
                 print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                 continue
+
+
     if wybor=="6":
         while True:
             print("Zakup towarow. Aktualny stan konta wynosi {} zl\n".format(konto))
@@ -440,6 +448,8 @@ Powrot do menu glownego - wpisz: 3""")
             if opcja_zakupu == "3":
                 break
                 wybor = input()
+
+
     if wybor=="7":
         while True:
             print("Historia zdarzen\n")

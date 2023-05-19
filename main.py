@@ -209,21 +209,92 @@ Czy chcesz szukac innego towaru? t/n:    """)
                     print("Wybrales zla opcje")
                     continue
     if wybor=="5":
-        print("Sprzedaz")
+        while True:
+            print("""Sprzedaz - wpisz: 1
+Wroc do menu glownego - wpisz: 2""")
+            odp_5 = input()
+            if odp_5 == "1":
+                przedmiot_sprzadazy = input("Podaj nazwe towaru do sprzedazy:   ")
+                if przedmiot_sprzadazy not in stan_magazynu:
+                    print("Takiego towaru nie ma magazynie. Powrot do menu\n")
+                    continue
+                    przedmiot_sprzadazy = input("Podaj nazwe towaru do sprzedazy:   ")
+                if przedmiot_sprzadazy in stan_magazynu:
+                    print("Aktualny stan w magazynie:\n")
+                    print(przedmiot_sprzadazy, stan_magazynu[przedmiot_sprzadazy])
+                    ilosc_sprzedawana = input("Podaj ilosc sprzedawanego towaru:   ")
+                    ilosc_sprzedawana = float(ilosc_sprzedawana)
+                    cena_sprzedazy = input("Podaj cene sprzedazy:   ")
+                    cena_sprzedazy = float(cena_sprzedazy)
+                    wartosc_sprzedazy = ilosc_sprzedawana * cena_sprzedazy
+                    wartosc_sprzedazy = float(wartosc_sprzedazy)
+                    if ilosc_sprzedawana > stan_magazynu[przedmiot_sprzadazy]["ilosc"]:
+                        print("W magazynie nie masz takiej ilosci {}\n".format(przedmiot_sprzadazy))
+                        continue
+                        przedmiot_sprzadazy = input("Podaj nazwe towaru do sprzedazy:   ")
+                    else:
+                        if cena_sprzedazy == stan_magazynu[przedmiot_sprzadazy]["cena"]:
+                            stan_magazynu[przedmiot_sprzadazy]["ilosc"] -= ilosc_sprzedawana
+                            stan_magazynu[przedmiot_sprzadazy]["wartosc"] -= wartosc_sprzedazy
+                            print(przedmiot_sprzadazy, stan_magazynu[przedmiot_sprzadazy])
+                            historia_index = historia_index + 1
+                            wpis_5_1 = ("{}. Sprzedano {}, w ilosci {}, po cenie {} zl"
+                            .format(historia_index, przedmiot_sprzadazy, ilosc_sprzedawana, cena_sprzedazy))
+                            historia.append(wpis_5_1)
+                            konto = konto + wartosc_sprzedazy
+                            print("\nCzy chcesz sprzedac kolejny produkt? t/n")
+                            odp5_1 = input()
+                            odp5_1 = odp5_1.lower()
+                            if odp5_1 == "t":
+                                continue
+                            elif odp5_1 == "n":
+                                break
+                                odp_5 = input()
+                            else:
+                                print("Wybrales zla opcje")
+                                continue
+                        if cena_sprzedazy != stan_magazynu[przedmiot_sprzadazy]["cena"]:
+                            stan_magazynu[przedmiot_sprzadazy]["ilosc"] -= ilosc_sprzedawana
+                            stara_wartosc = ilosc_sprzedawana * stan_magazynu[przedmiot_sprzadazy]["cena"]
+                            stan_magazynu[przedmiot_sprzadazy]["wartosc"] -= stara_wartosc
+                            print("Aktualny stan w magazynie:", przedmiot_sprzadazy, stan_magazynu[przedmiot_sprzadazy])
+                            zysk = wartosc_sprzedazy - stara_wartosc
+                            print("Ze sprzedazy {} osignales zysk w wysokości {} zl.".format(przedmiot_sprzadazy, zysk))
+                            historia_index = historia_index + 1
+                            wpis_5_2 = ("{}. Sprzedano {}, w ilosci {}, po cenie {} zl"
+                            .format(historia_index, przedmiot_sprzadazy, ilosc_sprzedawana, cena_sprzedazy))
+                            historia.append(wpis_5_2)
+                            konto = konto + wartosc_sprzedazy
+                            print("\nCzy chcesz sprzedac kolejny produkt? t/n")
+                            odp5_2 = input()
+                            odp5_2 = odp5_2.lower()
+                            if odp5_2 == "t":
+                                continue
+                            elif odp5_2 == "n":
+                                break
+                                odp_5 = input()
+                            else:
+                                print("Wybrales zla opcje")
+                                continue
+            if odp_5 == "2":
+                break
+                wybor = input()
+            else:
+                print("Wybrales zla opcje")
+                continue
     if wybor=="6":
         while True:
             print("Zakup towarow. Aktualny stan konta wynosi {} zl\n".format(konto))
             print("""Zakup towaru wystepujacego juz w magazynie - wpisz: 1
 Zakup towaru nie wystepujacego dotad w magazynie - wpisz: 2
 Powrot do menu glownego - wpisz: 3""")
-
             opcja_zakupu = input()
             if opcja_zakupu == "1":
-                zakup = input("\nWpisz nazwe produktu:  ")
+                zakup = input("\nWpisz nazwe towaru:  ")
                 if zakup not in stan_magazynu:
                     print("Takiego towaru nie ma magazynie. Powrot do menu\n")
                     continue
-                    wybor_towaru = input()
+                    opcja_zakupu = input()
                 if zakup in stan_magazynu:
                     print("Aktualny stan w magazynie:\n")
                     print(zakup, stan_magazynu[zakup])
@@ -233,49 +304,36 @@ Powrot do menu glownego - wpisz: 3""")
                     cena_kupna = float(cena_kupna)
                     wartosc_zakupu = ilosc_kupowana * cena_kupna
                     wartosc_zakupu = float(wartosc_zakupu)
-                    if cena_kupna != stan_magazynu[zakup]["cena"]:
-                        print("{} w magazynie ma inna cene. Wprowadz kupowany towar jako nowa pozycja w magazynie"
-                        .format(zakup))
+                    if wartosc_zakupu > konto:
+                        print("Nie masz wystarczajcych srodkow na koncie\n")
                         continue
                         opcja_zakupu = input()
-                    elif cena_kupna == stan_magazynu[zakup]["cena"]:
-                        stan_magazynu[zakup]["ilosc"] += ilosc_kupowana
-                        stan_magazynu[zakup]["wartosc"] += wartosc_zakupu
-                        print(zakup, stan_magazynu[zakup])
-
-                    # ilosc_2 = zakup["ilosc"]
-                    # print(ilosc_2)
-
-                    # ilosc = input("Wpisz ilosc produktu:   ")
-                    # ilosc = float(ilosc)
-                    # cena = input("Wpisz cene produktu:  ")
-                    # cena = float(cena)
-                    # wartosc = ilosc * cena
-                    # wartosc = float(wartosc)
-                    # if wartosc > konto:
-                    #     print("Nie masz wystarczajcych srodkow na koncie\n")
-                    #     continue
-                    #     opcja_zakupu = input()
-                    # else:
-                    #     stan_magazynu[produkt] = {"ilosc": ilosc, "cena": cena, "wartosc": wartosc}
-                    #     print("Zakupiono towar :{}, w ilosci: {}, w cenie: {}, laczna wartosc: {}".
-                    #           format(produkt, ilosc, cena, wartosc))
-                    #     historia_index = historia_index + 1
-                    #     wpis_3_1 = ("{}. Zakupiono {}, w ilosci {}, po cenie {} zl"
-                    #                 .format(historia_index, produkt, ilosc, cena))
-                    #     historia.append(wpis_3_1)
-                    #     konto = konto - wartosc
-                    #     print("\nCzy chcesz zakupic kolejny produkt? t/n")
-                    #     odp6 = input()
-                    #     odp6 = odp6.lower()
-                    #     if odp6 == "t":
-                    #         continue
-                    #     elif odp6 == "n":
-                    #         break
-                    #         wybor6 = input()
-                    #     else:
-                    #         print("Wybrales zla opcje")
-                    #         continue
+                    else:
+                        if cena_kupna != stan_magazynu[zakup]["cena"]:
+                            print("{} w magazynie ma inna cene. Wprowadz kupowany towar jako nowa pozycja w magazynie"
+                            .format(zakup))
+                            continue
+                            opcja_zakupu = input()
+                        elif cena_kupna == stan_magazynu[zakup]["cena"]:
+                            stan_magazynu[zakup]["ilosc"] += ilosc_kupowana
+                            stan_magazynu[zakup]["wartosc"] += wartosc_zakupu
+                            print(zakup, stan_magazynu[zakup])
+                            historia_index = historia_index + 1
+                            wpis_6_1 = ("{}. Zakupiono {}, w ilosci {}, po cenie {} zl"
+                                     .format(historia_index, zakup, ilosc_kupowana, cena_kupna))
+                            historia.append(wpis_6_1)
+                            konto = konto - wartosc_zakupu
+                            print("\nCzy chcesz zakupic kolejny produkt? t/n")
+                            odp6_1 = input()
+                            odp6_1 = odp6_1.lower()
+                            if odp6_1 == "t":
+                                continue
+                            elif odp6_1 == "n":
+                                break
+                                wybor6 = input()
+                            else:
+                                print("Wybrales zla opcje")
+                                continue
             if opcja_zakupu == "2":
                 produkt = input("\nWpisz nazwe nowego produktu:  ")
                 if produkt in stan_magazynu:
@@ -298,16 +356,16 @@ Powrot do menu glownego - wpisz: 3""")
                         print("Zakupiono towar :{}, w ilosci: {}, w cenie: {}, laczna wartosc: {}".
                             format(produkt, ilosc, cena, wartosc))
                         historia_index = historia_index + 1
-                        wpis_3_1 = ("{}. Zakupiono {}, w ilosci {}, po cenie {} zl"
+                        wpis_6_2 = ("{}. Zakupiono {}, w ilosci {}, po cenie {} zl"
                             .format(historia_index, produkt, ilosc, cena))
-                        historia.append(wpis_3_1)
+                        historia.append(wpis_6_2)
                         konto = konto - wartosc
                         print("\nCzy chcesz zakupic kolejny produkt? t/n")
-                        odp6 = input()
-                        odp6 = odp6.lower()
-                        if odp6 == "t":
+                        odp6_2 = input()
+                        odp6_2 = odp6_2.lower()
+                        if odp6_2 == "t":
                             continue
-                        elif odp6 == "n":
+                        elif odp6_2 == "n":
                             break
                             wybor6 = input()
                         else:

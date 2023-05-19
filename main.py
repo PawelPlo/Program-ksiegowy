@@ -146,7 +146,15 @@ Wroc do menu glownego - wpisz: 4""")
                 while True:
                     produkt = input("\nWpisz nazwe nowego produktu do wykreslenia:  ")
                     if produkt not in stan_magazynu:
-                        continue
+                        print("Nie ma takiego produktu w magazynie")
+                        print("\nCzy chcesz wykreslic kolejny produkt? t/n")
+                        odp3_1 = input()
+                        odp3_1 = odp3_1.lower()
+                        if odp3_1 == "t":
+                            continue
+                        if odp3_1 == "n":
+                            break
+                            wybor == 3
                     if produkt in stan_magazynu:
                         print(stan_magazynu[produkt])
                         potwierdzenie=input("\nCzy na pewno chcesz wykrelic ten produkt? t/n   ")
@@ -158,11 +166,11 @@ Wroc do menu glownego - wpisz: 4""")
                             historia.append(wpis_3_2)
                             del stan_magazynu[produkt]
                             print("\nCzy chcesz wykreslic kolejny produkt? t/n")
-                            odp3 = input()
-                            odp3 = odp3.lower()
-                            if odp3 == "t":
+                            odp3_2 = input()
+                            odp3_2 = odp3_2.lower()
+                            if odp3_2 == "t":
                                 continue
-                            if odp3 == "n":
+                            if odp3_2 == "n":
                                 break
                                 wybor==3
                         if potwierdzenie == "n":
@@ -182,7 +190,7 @@ Wroc do menu glownego - wpisz: 4""")
                 powrot4 = powrot4.lower()
                 if powrot4 == "t":
                     continue
-                elif powrot == "n":
+                elif powrot4 == "n":
                     break
                     wybor4 = input()
                 else:
@@ -208,53 +216,72 @@ Czy chcesz szukac innego towaru? t/n:    """)
             print("""Zakup towaru wystepujacego juz w magazynie - wpisz: 1
 Zakup towaru nie wystepujacego dotad w magazynie - wpisz: 2
 Powrot do menu glownego - wpisz: 3""")
-            wybor_towaru = input()
-            if wybor_towaru == "1":
-                produkt = input("\nWpisz nazwe produktu:  ")
-                if produkt not in stan_magazynu:
+
+            opcja_zakupu = input()
+            if opcja_zakupu == "1":
+                zakup = input("\nWpisz nazwe produktu:  ")
+                if zakup not in stan_magazynu:
                     print("Takiego towaru nie ma magazynie. Powrot do menu\n")
                     continue
                     wybor_towaru = input()
-                if produkt in stan_magazynu:
-                    print("Aktualny stan w magazynie:")
-                    print(produkt, stan_magazynu[produkt])
-                    #print(stan_magazynu[produkt, ilosc])    - nie działa !!!!!!!!!
-                    ilosc = input("Wpisz ilosc produktu:   ")
-                    ilosc = float(ilosc)
-                    cena = input("Wpisz cene produktu:  ")
-                    cena = float(cena)
-                    wartosc = ilosc * cena
-                    wartosc = float(wartosc)
-                    if wartosc > konto:
-                        print("Nie masz wystarczajcych srodkow na koncie\n")
+                if zakup in stan_magazynu:
+                    print("Aktualny stan w magazynie:\n")
+                    print(zakup, stan_magazynu[zakup])
+                    ilosc_kupowana = input("Podaj ilosc kupowanego towaru:   ")
+                    ilosc_kupowana = float(ilosc_kupowana)
+                    cena_kupna = input("Podaj cene kupna:   ")
+                    cena_kupna = float(cena_kupna)
+                    wartosc_zakupu = ilosc_kupowana * cena_kupna
+                    wartosc_zakupu = float(wartosc_zakupu)
+                    if cena_kupna != stan_magazynu[zakup]["cena"]:
+                        print("{} w magazynie ma inna cene. Wprowadz kupowany towar jako nowa pozycja w magazynie"
+                        .format(zakup))
                         continue
-                        wybor_towaru = input()
-                    else:
-                        stan_magazynu[produkt] = {"ilosc": ilosc, "cena": cena, "wartosc": wartosc}
-                        print("Zakupiono towar :{}, w ilosci: {}, w cenie: {}, laczna wartosc: {}".
-                              format(produkt, ilosc, cena, wartosc))
-                        historia_index = historia_index + 1
-                        wpis_3_1 = ("{}. Zakupiono {}, w ilosci {}, po cenie {} zl"
-                                    .format(historia_index, produkt, ilosc, cena))
-                        historia.append(wpis_3_1)
-                        konto = konto - wartosc
-                        print("\nCzy chcesz zakupic kolejny produkt? t/n")
-                        odp6 = input()
-                        odp6 = odp6.lower()
-                        if odp6 == "t":
-                            continue
-                        elif odp6 == "n":
-                            break
-                            wybor6 = input()
-                        else:
-                            print("Wybrales zla opcje")
-                            continue
-            if wybor_towaru == "2":
+                        opcja_zakupu = input()
+                    elif cena_kupna == stan_magazynu[zakup]["cena"]:
+                        stan_magazynu[zakup]["ilosc"] += ilosc_kupowana
+                        stan_magazynu[zakup]["wartosc"] += wartosc_zakupu
+                        print(zakup, stan_magazynu[zakup])
+
+                    # ilosc_2 = zakup["ilosc"]
+                    # print(ilosc_2)
+
+                    # ilosc = input("Wpisz ilosc produktu:   ")
+                    # ilosc = float(ilosc)
+                    # cena = input("Wpisz cene produktu:  ")
+                    # cena = float(cena)
+                    # wartosc = ilosc * cena
+                    # wartosc = float(wartosc)
+                    # if wartosc > konto:
+                    #     print("Nie masz wystarczajcych srodkow na koncie\n")
+                    #     continue
+                    #     opcja_zakupu = input()
+                    # else:
+                    #     stan_magazynu[produkt] = {"ilosc": ilosc, "cena": cena, "wartosc": wartosc}
+                    #     print("Zakupiono towar :{}, w ilosci: {}, w cenie: {}, laczna wartosc: {}".
+                    #           format(produkt, ilosc, cena, wartosc))
+                    #     historia_index = historia_index + 1
+                    #     wpis_3_1 = ("{}. Zakupiono {}, w ilosci {}, po cenie {} zl"
+                    #                 .format(historia_index, produkt, ilosc, cena))
+                    #     historia.append(wpis_3_1)
+                    #     konto = konto - wartosc
+                    #     print("\nCzy chcesz zakupic kolejny produkt? t/n")
+                    #     odp6 = input()
+                    #     odp6 = odp6.lower()
+                    #     if odp6 == "t":
+                    #         continue
+                    #     elif odp6 == "n":
+                    #         break
+                    #         wybor6 = input()
+                    #     else:
+                    #         print("Wybrales zla opcje")
+                    #         continue
+            if opcja_zakupu == "2":
                 produkt = input("\nWpisz nazwe nowego produktu:  ")
                 if produkt in stan_magazynu:
                     print("Taki towar znajduje sie juz w magazynie. Powrot do menu\n")
                     continue
-                    wybor_towaru = input()
+                    opcja_zakupu = input()
                 if produkt not in stan_magazynu:
                     ilosc = input("Wpisz ilosc produktu:   ")
                     ilosc = float(ilosc)
@@ -265,7 +292,7 @@ Powrot do menu glownego - wpisz: 3""")
                     if wartosc > konto:
                         print("Nie masz wystarczajcych srodkow na koncie\n")
                         continue
-                        wybor_towaru = input()
+                        opcja_zakupu = input()
                     else:
                         stan_magazynu[produkt] = {"ilosc": ilosc, "cena": cena, "wartosc": wartosc}
                         print("Zakupiono towar :{}, w ilosci: {}, w cenie: {}, laczna wartosc: {}".
@@ -286,7 +313,7 @@ Powrot do menu glownego - wpisz: 3""")
                         else:
                             print("Wybrales zla opcje")
                             continue
-            if wybor_towaru == "3":
+            if opcja_zakupu == "3":
                 break
                 wybor = input()
     if wybor=="7":

@@ -120,7 +120,7 @@ Powrot do menu glownego - wpisz: 3\n""")
                     konto = konto - wyplata
                     print("\nStan konta wynosi: {}".format(konto))
                     historia_index = historia_index + 1
-                    wpis_2 = ("{}. Wyplata z konta: {} zl\n".format(historia_index, wyplata))
+                    wpis_2 = ("{}. Wyplata z konta: {} zl".format(historia_index, wyplata))
                     historia.append(wpis_2)
                     continue
             if wybor2 == "3":
@@ -449,18 +449,17 @@ Powrot do menu glownego - wpisz: 3""")
                 break
                 wybor = input()
 
-
     if wybor=="7":
         while True:
-            print("Historia zdarzen\n")
+            print("\nHistoria zdarzen\n")
             print("""Pelna historia zdarzen - wpisz: 1
 Wybor zakresu z histori zdarzen - wpisz: 2
 Powrot do glownego menu - wpisz: 3""")
             wybor7 = input()
             if wybor7 == "1":
-                print(historia)
+                for cala_historia in historia:
+                    print(cala_historia)
                 powrot7=input('Wpisz "Q" aby wrocic do menu "Historia zdarzen":   ')
-                powrot7=powrot7.lower()
                 if powrot7=="q":
                     continue
                     wybor7 = input()

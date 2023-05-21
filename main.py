@@ -1,13 +1,58 @@
-#program ksiegowy
+"""Program ksiegowy
+W menu glownym mozna wybrac 8 opcji:
 
-#zmienne do czesci 1 i 2 (Obsluga kredytow i saldo, stan konta, operacje gotowkowe)
+Obsluga kredytow (1)
+    W tej części można zaciągać i spłacać kredyty, co znajduje odzwierciedlenie w stanie konta firmy. W przypadku spłaty
+    kredytu w kwocie przewyższającej stan konta, program zglośi błąd.
+    Akcje wykonane w tej części są zapamiętywane w historii.
+
+Saldo, stan konta i operacje gotowkowe (2)
+    W tej części można zrobic podgląd stanu finansów firmy i wartości zapasów zgromadzonych w magazynie. Można też
+    wpłacić środki własne na konto, bądź też je wypłacić. W przypadku wypłaty w kwocie przewyższającej stan konta,
+    program zglośi błąd. Akcje wykonane w tej części są zapamiętywane w historii.
+
+Stan magazynu (dane calosciowe, wprowadzanie i wykreslanie towarow) (3)
+    W tej części można prześledzić całą listę stanu magazynu. Można dodawać nowe produktu do magazynu (inne niż
+    zakupione), bądź też tworzyć nowe kategorie produktów, dodając towary i wpisując ilość "zero".
+    Akcje wykonane w tej części są zapamiętywane w historii.
+
+Znajdz produkt w magazynie (4)
+    Wyszukiwarka produktów. Tutaj można sprawdzić, czy jakiś produkt jest w magazynie.
+
+Sprzedaz (5)
+    Tutaj można sprzedawać produkty znajdujące się w magazynie. Jeśli wpiszę produkt nie istniejący w magazynie, program
+    zgłosi błąd. Jeśli wpiszę ilość sprzedawanego towaru większą niż zapasy w magazynie, program zgłosi błąd.
+    Jeśli wpiszę sprzedaż po cenie zakupu, program wykreśli odpowiednią ilość produktu z magazynu, zmieni
+    jego wartość w magazynie i uzyskane ze sprzedaży pieniądze doda na konto.
+    Jeśli wpiszę cenę sprzedaży po cenie innej niż cena zakupu, program wykona wcześniej wymienione akcje, a także
+    czy jaki zysk (bądź stratę) uzyskałem ze sprzedaży tej partii towaru.
+    Akcje wykonane w tej części są zapamiętywane w historii.
+
+Zakup (6)
+    Są dwie opcje zakupu - towarów, które są w magazynie i towarów, które dotąd w magaynie nie było. Jeśli wpiszę towar
+    który w magayzynie już był, ale w innej cenie niż kupowana, program zgłosi błąd i wskaże, że dla ten towar
+    powininnem wpisać jako nowy.
+    Jeśli będę chciał kupić towary o wartości przekraczającej stan konta, program zgłosi błąd.
+    Akcje wykonane w tej części są zapamiętywane w historii.
+
+Historia zdarzen - wpisz: 7
+    Na liście gromadzone są dane o czynnościach przeprowadzonych w poprzednich częściach. Listę można wyświetlać w
+    całości, bądź w odpowiednim, wskazanym zakresie.
+
+Wyjscie z programu - wpisanie słowa 'koniec', kończy program.
+
+Program uwzględnia ewentualne błędy użytkownika, w tym wpisywanie towarów wielkimi bądź małymi literami, dodawanie
+    spacji, wpisywanie słów zamiast wartości przy cenach i ilości.
+"""
+
+"""zmienne do czesci 1 i 2 (Obsluga kredytow i saldo, stan konta, operacje gotowkowe)"""
 saldo=0
 konto=0
 konto=float(konto)
 zadluzenie = 0
 zadluzenie = float(zadluzenie)
 
-#zmienne i funkcje do stanu magazynu
+"""zmienne i funkcje do stanu magazynu"""
 stan_magazynu = dict()
 def zapasy(stan_magazynu):
     suma = 0
@@ -15,7 +60,7 @@ def zapasy(stan_magazynu):
         suma += v["wartosc"]
     return suma
 
-#zmienne do historii zdarzen
+"""zmienne do historii zdarzen"""
 historia = []
 historia_index=0
 

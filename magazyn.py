@@ -54,6 +54,7 @@ with open("konto.txt", "r") as plik:
         konto=float(linia)
 konto=float(konto)
 print(f"To jest stan konta z pliku {konto}")
+
 with open("zadluzenie.txt", "r") as plik:
     for linia in plik:
         zadluzenie=float(linia)
@@ -65,8 +66,15 @@ stan_magazynu = dict()
 
 with open("stan_magazynu.txt", "r") as plik:
     for linia in plik:
-        produkt, cena, ilosc, wartosc = linia.strip().split('?')
-        stan_magazynu[produkt] = float(cena), float(ilosc), float(wartosc)
+        linia = linia.split()
+        produkt, ilosc, cena, wartosc = linia
+        produkt = str(produkt)
+        stan_magazynu[produkt] = {}
+        ilosc = float(ilosc)
+        cena = float(cena)
+        wartosc = float(wartosc)
+        stan_magazynu[produkt] = {"ilosc": ilosc, "cena": cena, "wartosc": wartosc}
+stan_magazynu = stan_magazynu
 
 def zapasy(stan_magazynu):
     suma = 0
@@ -199,8 +207,14 @@ Wykresl produkt z magazynu - wpisz: 3
 Wroc do menu glownego - wpisz: 4\n""")
             wybor3=input()
             wybor3 = wybor3.lower()
+            if wybor3 != "1" and wybor3 != "2" and wybor3 != "3" and wybor3 != "4":
+                print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
+                continue
             if wybor3=="1":
-                print(stan_magazynu)
+                number = 0
+                for row in stan_magazynu.items():
+                    number += 1
+                    print(number, row)
                 powrot=input('Powrot do menu "Stan magazynu" - wybierz "Q":   ')
                 wybor == "3"
             if wybor3 == "2":
@@ -236,6 +250,10 @@ Wroc do menu glownego - wpisz: 4\n""")
                     else:
                         print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                         continue
+                with open("stan_magazynu.txt", "w") as plik:
+                    for k, v in stan_magazynu.items():
+                        v = ilosc, cena, wartosc
+                        plik.write(f"{k} {ilosc} {cena} {wartosc}\n")
             if wybor3 == "3":
                 while True:
                     produkt = input("\nWpisz nazwe nowego produktu do wykreslenia:  ").strip()
@@ -274,12 +292,14 @@ Wroc do menu glownego - wpisz: 4\n""")
                         else:
                             print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                             continue
+                with open("stan_magazynu.txt", "w") as plik:
+                    for k, v in stan_magazynu.items():
+                        v = ilosc, cena, wartosc
+                        plik.write(f"{k}{v}")
             if wybor3 == "4":
                 break
                 wybor = input()
-            else:
-                print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
-                continue
+
 
 
     if wybor=="4":

@@ -115,11 +115,15 @@ Powrot do glownego menu  - wpisz: 3""")
                     continue
                 kredyt = float(kredyt)
                 zadluzenie += kredyt
+                with open("zadluzenie.txt", "w") as plik:
+                    plik.write(f"{zadluzenie}")
                 print("Stan zadluzenia po zmianie wynosi {} zl\n\n".format(zadluzenie))
                 historia_index = historia_index + 1
                 wpis_1_1 = ("{}. Zaciagniety kredyt w wysokosci: {} zl".format(historia_index, kredyt))
                 historia.append(wpis_1_1)
                 konto = konto + kredyt
+                with open("konto.txt", "w") as plik:
+                    plik.write(f"{konto}")
                 continue
                 odp1 = input()
             if odp1=="2":
@@ -134,7 +138,12 @@ Powrot do glownego menu  - wpisz: 3""")
                     wybor == "1"
                 if splata <= konto:
                     zadluzenie -= splata
+                    with open("zadluzenie.txt", "w") as plik:
+                        plik.write(f"{zadluzenie}")
                     konto = konto - splata
+                    with open("konto.txt", "w") as plik:
+                        plik.write(f"{konto}")
+                    continue
                     print("Stan zadluzenia po zmianie wynosi {} zl\n".format(zadluzenie))
                     historia_index = historia_index + 1
                     wpis_1_2 = ("{}. Splata kredytu w wysokosci: {} zl".format(historia_index, splata))
@@ -295,7 +304,7 @@ Wroc do menu glownego - wpisz: 4\n""")
                 with open("stan_magazynu.txt", "w") as plik:
                     for k, v in stan_magazynu.items():
                         v = ilosc, cena, wartosc
-                        plik.write(f"{k}{v}")
+                        plik.write(f"{k} {ilosc} {cena} {wartosc}\n")
             if wybor3 == "4":
                 break
                 wybor = input()

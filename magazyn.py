@@ -84,7 +84,15 @@ def zapasy(stan_magazynu):
 
 """zmienne do historii zdarzen"""
 historia = []
-historia_index=0
+
+with open("historia.txt", "r") as plik:
+    for linia in plik:
+        linia = linia.strip('\n')
+        historia.append(linia)
+
+historia = historia
+
+
 
 while True:
     print(" ------------- Program księgowy -------------\n")
@@ -115,15 +123,11 @@ Powrot do glownego menu  - wpisz: 3""")
                     continue
                 kredyt = float(kredyt)
                 zadluzenie += kredyt
-                with open("zadluzenie.txt", "w") as plik:
-                    plik.write(f"{zadluzenie}")
                 print("Stan zadluzenia po zmianie wynosi {} zl\n\n".format(zadluzenie))
-                historia_index = historia_index + 1
-                wpis_1_1 = ("{}. Zaciagniety kredyt w wysokosci: {} zl".format(historia_index, kredyt))
+
+                wpis_1_1 = ("Zaciagniety kredyt w wysokosci: {} zl".format(kredyt))
                 historia.append(wpis_1_1)
                 konto = konto + kredyt
-                with open("konto.txt", "w") as plik:
-                    plik.write(f"{konto}")
                 continue
                 odp1 = input()
             if odp1=="2":
@@ -138,15 +142,8 @@ Powrot do glownego menu  - wpisz: 3""")
                     wybor == "1"
                 if splata <= konto:
                     zadluzenie -= splata
-                    with open("zadluzenie.txt", "w") as plik:
-                        plik.write(f"{zadluzenie}")
-                    konto = konto - splata
-                    with open("konto.txt", "w") as plik:
-                        plik.write(f"{konto}")
-                    continue
                     print("Stan zadluzenia po zmianie wynosi {} zl\n".format(zadluzenie))
-                    historia_index = historia_index + 1
-                    wpis_1_2 = ("{}. Splata kredytu w wysokosci: {} zl".format(historia_index, splata))
+                    wpis_1_2 = ("Splata kredytu w wysokosci: {} zl".format(splata))
                     historia.append(wpis_1_2)
                     continue
             if odp1=="3":
@@ -177,11 +174,8 @@ Powrot do menu glownego - wpisz: 3\n""")
                     continue
                 wplata=float(wplata)
                 konto = konto+wplata
-                with open("konto.txt", "w") as plik:
-                    plik.write(f"{konto}")
                 print("\nStan konta wynosi: {}".format(konto))
-                historia_index=historia_index + 1
-                wpis_2=("{}. Wplata wlasna na konto: {} zl".format(historia_index,wplata))
+                wpis_2=("Wplata wlasna na konto: {} zl".format(wplata))
                 historia.append(wpis_2)
                 continue
             if wybor2=="2":
@@ -195,11 +189,8 @@ Powrot do menu glownego - wpisz: 3\n""")
                     continue
                 if wyplata < konto:
                     konto = konto - wyplata
-                    with open("konto.txt", "w") as plik:
-                        plik.write(f"{konto}")
                     print("\nStan konta wynosi: {}".format(konto))
-                    historia_index = historia_index + 1
-                    wpis_2 = ("{}. Wyplata z konta: {} zl".format(historia_index, wyplata))
+                    wpis_2 = ("Wyplata z konta: {} zl".format(wyplata))
                     historia.append(wpis_2)
                     continue
             if wybor2 == "3":
@@ -246,10 +237,9 @@ Wroc do menu glownego - wpisz: 4\n""")
                     wartosc = ilosc * cena
                     wartosc = float(wartosc)
                     stan_magazynu[produkt] = {"ilosc": ilosc, "cena": cena, "wartosc": wartosc}
-                    print("Wprowadzono towar :{}, w ilosci: {}, w cenie: {}, laczna wartosc: {}".format(produkt, ilosc, cena, wartosc))
-                    historia_index = historia_index + 1
-                    wpis_3_1 = ("{}. Wprowadzono do magazynu {}, w ilosci {}, po cenie {} zl"
-                                .format(historia_index, produkt, ilosc, cena))
+                    print("Wprowadzono towar: {}, w ilosci: {}, w cenie: {}, laczna wartosc: {}".format(produkt, ilosc,
+                                                                                                        cena, wartosc))
+                    wpis_3_1 = ("Wprowadzono do magazynu {}, w ilosci {}, po cenie {} zl".format(produkt, ilosc, cena))
                     historia.append(wpis_3_1)
                     print("\nCzy chcesz wprowadzic kolejny produkt? t/n")
                     odp2 = input()
@@ -262,13 +252,10 @@ Wroc do menu glownego - wpisz: 4\n""")
                     else:
                         print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                         continue
-                with open("stan_magazynu.txt", "w") as plik:
-                    for k, v in stan_magazynu.items():
-                        v = ilosc, cena, wartosc
-                        plik.write(f"{k} {ilosc} {cena} {wartosc}\n")
+
             if wybor3 == "3":
                 while True:
-                    produkt = input("\nWpisz nazwe nowego produktu do wykreslenia:  ").strip()
+                    produkt = input("\nWpisz nazwe produktu do wykreslenia:  ").strip()
                     produkt = produkt.lower()
                     if produkt not in stan_magazynu:
                         print("Nie ma takiego produktu w magazynie")
@@ -285,9 +272,8 @@ Wroc do menu glownego - wpisz: 4\n""")
                         potwierdzenie=input("\nCzy na pewno chcesz wykrelic ten produkt? t/n   ")
                         potwierdzenie=potwierdzenie.lower()
                         if potwierdzenie == "t":
-                            historia_index = historia_index + 1
-                            wpis_3_2 = ("{}. Ze stanu magazynu magazynu zdjeto {} - {}"
-                            .format(historia_index, produkt, stan_magazynu[produkt]))
+                            wpis_3_2 = ("Ze stanu magazynu magazynu zdjeto {} - {}"
+                            .format(produkt, stan_magazynu[produkt]))
                             historia.append(wpis_3_2)
                             del stan_magazynu[produkt]
                             print("\nCzy chcesz wykreslic kolejny produkt? t/n")
@@ -304,10 +290,7 @@ Wroc do menu glownego - wpisz: 4\n""")
                         else:
                             print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                             continue
-                with open("stan_magazynu.txt", "w") as plik:
-                    for k, v in stan_magazynu.items():
-                        v = ilosc, cena, wartosc
-                        plik.write(f"{k} {ilosc} {cena} {wartosc}\n")
+
             if wybor3 == "4":
                 break
                 wybor = input()
@@ -343,8 +326,7 @@ Czy chcesz szukac innego towaru? t/n:    """)
                     print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                     continue
 
-
-    if wybor=="5":
+    if wybor == "5":
         while True:
             print("""Sprzedaz - wpisz: 1
 Wroc do menu glownego - wpisz: 2""")
@@ -379,19 +361,13 @@ Wroc do menu glownego - wpisz: 2""")
                         if cena_sprzedazy == stan_magazynu[przedmiot_sprzadazy]["cena"]:
                             stan_magazynu[przedmiot_sprzadazy]["ilosc"] -= ilosc_sprzedawana
                             stan_magazynu[przedmiot_sprzadazy]["wartosc"] -= wartosc_sprzedazy
-                            with open("stan_magazynu.txt", "w") as plik:
-                                for k, v in stan_magazynu.items():
-                                    v = ilosc, cena, wartosc
-                                    plik.write(f"{k} {ilosc} {cena} {wartosc}\n")
                             print(przedmiot_sprzadazy, stan_magazynu[przedmiot_sprzadazy])
-                            historia_index = historia_index + 1
-                            wpis_5_1 = ("{}. Sprzedano {}, w ilosci {}, po cenie {} zl"
-                            .format(historia_index, przedmiot_sprzadazy, ilosc_sprzedawana, cena_sprzedazy))
+                            wpis_5_1 = ("Sprzedano {}, w ilosci {}, po cenie {} zl"
+                                .format(przedmiot_sprzadazy, ilosc_sprzedawana, cena_sprzedazy))
                             historia.append(wpis_5_1)
                             konto = konto + wartosc_sprzedazy
-                            with open("konto.txt", "w") as plik:
-                                plik.write(f"{konto}")
-                            print("Sprzedales {} za laczno kwote {} zl".format(przedmiot_sprzadazy, wartosc_sprzedazy))
+                            print("Sprzedales {} za laczno kwote {} zl".format(przedmiot_sprzadazy,
+                                                                                   wartosc_sprzedazy))
                             print("\nCzy chcesz sprzedac kolejny produkt? t/n")
                             odp5_1 = input()
                             odp5_1 = odp5_1.lower()
@@ -407,25 +383,16 @@ Wroc do menu glownego - wpisz: 2""")
                             stan_magazynu[przedmiot_sprzadazy]["ilosc"] -= ilosc_sprzedawana
                             stara_wartosc = ilosc_sprzedawana * stan_magazynu[przedmiot_sprzadazy]["cena"]
                             stan_magazynu[przedmiot_sprzadazy]["wartosc"] -= stara_wartosc
-                            with open("stan_magazynu.txt", "w") as plik:
-                                for k, v in stan_magazynu.items():
-                                    v = ilosc, cena, wartosc
-                                    plik.write(f"{k} {ilosc} {cena} {wartosc}\n")
                             print("Aktualny stan w magazynie:", przedmiot_sprzadazy, stan_magazynu[przedmiot_sprzadazy])
                             zysk = wartosc_sprzedazy - stara_wartosc
-                            historia_index = historia_index + 1
-                            wpis_5_2 = ("{}. Sprzedano {}, w ilosci {}, po cenie {} zl"
-                            .format(historia_index, przedmiot_sprzadazy, ilosc_sprzedawana, cena_sprzedazy))
+                            wpis_5_2 = ("Sprzedano {}, w ilosci {}, po cenie {} zl".format(przedmiot_sprzadazy,
+                                                                                           ilosc_sprzedawana, cena_sprzedazy))
                             historia.append(wpis_5_2)
                             konto = konto + wartosc_sprzedazy
-                            with open("konto.txt", "w") as plik:
-                                plik.write(f"{konto}")
                             if zysk > 0:
-                                print("Ze sprzedazy {} osignales zysk w wysokości {} zl."
-                                .format(przedmiot_sprzadazy, zysk))
+                                print("Ze sprzedazy {} osignales zysk w wysokości {} zl.".format(przedmiot_sprzadazy, zysk))
                             if zysk < 0:
-                                print("Sprzedaz {} zakonczyla sie strata w wysokości {} zl."
-                                .format(przedmiot_sprzadazy,zysk))
+                                print("Sprzedaz {} zakonczyla sie strata w wysokości {} zl.".format(przedmiot_sprzadazy, zysk))
                             print("\nCzy chcesz sprzedac kolejny produkt? t/n")
                             odp5_2 = input()
                             odp5_2 = odp5_2.lower()
@@ -443,7 +410,6 @@ Wroc do menu glownego - wpisz: 2""")
             else:
                 print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                 continue
-
 
     if wybor=="6":
         while True:
@@ -487,18 +453,11 @@ Powrot do menu glownego - wpisz: 3""")
                         elif cena_kupna == stan_magazynu[zakup]["cena"]:
                             stan_magazynu[zakup]["ilosc"] += ilosc_kupowana
                             stan_magazynu[zakup]["wartosc"] += wartosc_zakupu
-                            with open("stan_magazynu.txt", "w") as plik:
-                                for k, v in stan_magazynu.items():
-                                    v = ilosc, cena, wartosc
-                                    plik.write(f"{k} {ilosc} {cena} {wartosc}\n")
                             print(zakup, stan_magazynu[zakup])
-                            historia_index = historia_index + 1
-                            wpis_6_1 = ("{}. Zakupiono {}, w ilosci {}, po cenie {} zl"
-                                     .format(historia_index, zakup, ilosc_kupowana, cena_kupna))
+                            wpis_6_1 = ("Zakupiono {}, w ilosci {}, po cenie {} zl"
+                                     .format(zakup, ilosc_kupowana, cena_kupna))
                             historia.append(wpis_6_1)
                             konto = konto - wartosc_zakupu
-                            with open("konto.txt", "w") as plik:
-                                plik.write(f"{konto}")
                             print("\nCzy chcesz zakupic kolejny produkt? t/n")
                             odp6_1 = input()
                             odp6_1 = odp6_1.lower()
@@ -510,6 +469,7 @@ Powrot do menu glownego - wpisz: 3""")
                             else:
                                 print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                                 continue
+
             if opcja_zakupu == "2":
                 produkt = input("\nWpisz nazwe nowego produktu:  ").strip()
                 produkt = produkt.lower()
@@ -536,19 +496,11 @@ Powrot do menu glownego - wpisz: 3""")
                         opcja_zakupu = input()
                     else:
                         stan_magazynu[produkt] = {"ilosc": ilosc, "cena": cena, "wartosc": wartosc}
-                        with open("stan_magazynu.txt", "w") as plik:
-                            for k, v in stan_magazynu.items():
-                                v = ilosc, cena, wartosc
-                                plik.write(f"{k} {ilosc} {cena} {wartosc}\n")
                         print("Zakupiono towar :{}, w ilosci: {}, w cenie: {}, laczna wartosc: {}".
                             format(produkt, ilosc, cena, wartosc))
-                        historia_index = historia_index + 1
-                        wpis_6_2 = ("{}. Zakupiono {}, w ilosci {}, po cenie {} zl"
-                            .format(historia_index, produkt, ilosc, cena))
+                        wpis_6_2 = ("Zakupiono {}, w ilosci {}, po cenie {} zl".format(produkt, ilosc, cena))
                         historia.append(wpis_6_2)
                         konto = konto - wartosc
-                        with open("konto.txt", "w") as plik:
-                            plik.write(f"{konto}")
                         print("\nCzy chcesz zakupic kolejny produkt? t/n")
                         odp6_2 = input()
                         odp6_2 = odp6_2.lower()
@@ -560,6 +512,7 @@ Powrot do menu glownego - wpisz: 3""")
                         else:
                             print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                             continue
+
             if opcja_zakupu == "3":
                 break
                 wybor = input()
@@ -572,8 +525,10 @@ Wybor zakresu z histori zdarzen - wpisz: 2
 Powrot do glownego menu - wpisz: 3""")
             wybor7 = input()
             if wybor7 == "1":
+                index = 0
                 for cala_historia in historia:
-                    print(cala_historia)
+                    index += 1
+                    print(index, cala_historia)
                 powrot7=input('Wpisz "Q" aby wrocic do menu "Historia zdarzen":   ')
                 if powrot7=="q":
                     continue
@@ -582,6 +537,7 @@ Powrot do glownego menu - wpisz: 3""")
                     continue
                     wybor7 = input()
             if wybor7 == "2":
+                index = 0
                 od=input("Wprowadz poczatkowy numer z listy:   ")
                 if not od.isdigit():
                     print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
@@ -597,7 +553,8 @@ Powrot do glownego menu - wpisz: 3""")
                     print("Wybrales liczby spoza zakresu listy. Sproboj jeszcze raz.\n\n")
                     continue
                 for zakres in range(od, do):
-                    print(historia[zakres])
+                    index += 1
+                    print(index, historia[zakres])
                 powrot7=input('Powrot do menu "Historia zdarzen" - wpisz: "q"\n\n')
                 continue
             if wybor7 == "3":
@@ -607,7 +564,23 @@ Powrot do glownego menu - wpisz: 3""")
                 print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
                 continue
     if wybor=="koniec":
+        with open("stan_magazynu.txt", "w") as plik:
+            for k, v in stan_magazynu.items():
+                v = ilosc, cena, wartosc
+                ilosc = stan_magazynu[k]["ilosc"]
+                cena = stan_magazynu[k]["cena"]
+                wartosc = stan_magazynu[k]["wartosc"]
+                plik.write(f"{k} {ilosc} {cena} {wartosc}\n")
+        with open("konto.txt", "w") as plik:
+            plik.write(f"{konto}")
+        with open("zadluzenie.txt", "w") as plik:
+            plik.write(f"{zadluzenie}")
+        with open("historia.txt", "w") as plik:
+            for linia in historia:
+                plik.write(f"{linia}")
+                plik.write(f"\n")
         break
     else:
         print("Wybrales zla opcje! Sproboj jeszcze raz.\n")
         continue
+

@@ -47,17 +47,28 @@ Program uwzględnia ewentualne błędy użytkownika, w tym wpisywanie towarów w
 
 """zmienne do czesci 1 i 2 (Obsluga kredytow i saldo, stan konta, operacje gotowkowe)"""
 
+import os
+pliki_w_folderze = os.listdir()
 
 saldo=0
-with open("konto.txt", "r") as plik:
-    for linia in plik:
-        konto=float(linia)
-konto=float(konto)
-print(f"To jest stan konta z pliku {konto}")
 
-with open("zadluzenie.txt", "r") as plik:
-    for linia in plik:
-        zadluzenie=float(linia)
+if "konto.txt" in pliki_w_folderze:
+    with open("konto.txt", "r") as plik:
+        for linia in plik:
+            konto = float(linia)
+
+else:
+    konto = float(0)
+
+konto=float(konto)
+
+if "zadluzenie.txt." in pliki_w_folderze:
+    with open("zadluzenie.txt", "r") as plik:
+        for linia in plik:
+            zadluzenie = float(linia)
+else:
+    zadluzenie = float(0)
+
 zadluzenie = float(zadluzenie)
 
 """zmienne i funkcje do stanu magazynu"""

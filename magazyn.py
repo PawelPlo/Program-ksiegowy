@@ -80,6 +80,7 @@ with open("stan_magazynu.txt", "r") as plik:
         linia = linia.split()
         produkt, ilosc, cena, wartosc = linia
         produkt = str(produkt)
+        produkt = produkt.replace("_"," ")
         stan_magazynu[produkt] = {}
         ilosc = float(ilosc)
         cena = float(cena)
@@ -581,6 +582,7 @@ Powrot do glownego menu - wpisz: 3""")
                 ilosc = stan_magazynu[k]["ilosc"]
                 cena = stan_magazynu[k]["cena"]
                 wartosc = stan_magazynu[k]["wartosc"]
+                k = k.replace(" ","_")
                 plik.write(f"{k} {ilosc} {cena} {wartosc}\n")
         with open("konto.txt", "w") as plik:
             plik.write(f"{konto}")

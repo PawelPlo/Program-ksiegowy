@@ -48,77 +48,9 @@ Program uwzględnia ewentualne błędy użytkownika, w tym wpisywanie towarów w
 """zmienne do czesci 1 i 2 (Obsluga kredytow i saldo, stan konta, operacje gotowkowe)"""
 import os
 
-class Pliki:
-    saldo = 0
-    historia = []
-    pliki_w_folderze = os.listdir()
+
+class Manager:
     def __init__ (self):
-
-        pliki_w_folderze = os.listdir()
-        if "konto.txt" in pliki_w_folderze:
-            with open("konto.txt", "r") as plik:
-                for linia in plik:
-                    konto = float(linia)
-
-        else:
-            konto = float(0)
-
-        self.konto = konto
-        self.konto = float(self.konto)
-
-
-        if "zadluzenie.txt." in pliki_w_folderze:
-            with open("zadluzenie.txt", "r") as plik:
-                for linia in plik:
-                    zadluzenie = float(linia)
-        else:
-            zadluzenie = float(0)
-
-        self.zadluzenie = zadluzenie
-        self.zadluzenie = float(self.zadluzenie)
-
-        """zmienne i funkcje do stanu magazynu"""
-
-        with open("stan_magazynu.txt", "r") as plik:
-            for linia in plik:
-                linia = linia.split()
-                produkt, ilosc, cena, wartosc = linia
-                produkt = str(produkt)
-                produkt = produkt.replace("_", " ")
-                self.stan_magazynu[produkt] = {}
-                ilosc = float(ilosc)
-                cena = float(cena)
-                wartosc = float(wartosc)
-                self.stan_magazynu[produkt] = {"ilosc": ilosc, "cena": cena, "wartosc": wartosc}
-
-        self.stan_magazynu = dict()
-
-        def zapasy (stan_magazynu):
-            for v in self.stan_magazynu.values():
-                self.wartosc_zapasow += v["wartosc"]
-                return self.wartosc_zapasow
-
-        self.wartosc_zapasow = float(self.wartosc_zapasow)
-
-        """zmienne do historii zdarzen"""
-
-
-        self.historia = []
-        with open("historia.txt", "r") as plik:
-            for linia in plik:
-                linia = linia.strip('\n')
-                self.historia.append(linia)
-
-
-
-
-
-    # def __repr__(self):
-    #     return f"{self.konto}"
-
-class Manager(Pliki):
-
-    def __init__ (self,):
         self.funkcje = {}
 
     def przypisz_funkcje (self, nazwa):
@@ -131,15 +63,77 @@ class Manager(Pliki):
             print("Action not defined")
         else:
             self.funkcje[nazwa](self, *args, **kwargs)
+class Hurtownia(Manager):
+
+    pliki_w_folderze = os.listdir()
+    def __init__ (self):
+        self.saldo = 0
+        self.historia = self.pobieranie_historii_z_pliku
+        self.konto = self.pobieranie_konta_z_pliku
+        self.zadluzenie = self.pobieranie_zadluzenia_z_pliku
+        self.stan_magazynu = self.pobieranie_magazynu_z_pliku
+        self.wartosc_zapasow = self.zapasy
+        super().__init__()
 
 
-       # self.funkcje[nazwa](self, *args, **kwargs)
+        # else:
+        #     konto = float(0)
+        #
+        # self.konto = konto
+        # self.konto = float(self.konto)
 
 
-fm = Manager()
+    def pobieranie_zadluzenia_z_pliku (self):
+            with open("zadluzenie.txt", "r") as plik:
+                for linia in plik:
+                    self.zadluzenie = float(linia)
 
+        # self.zadluzenie = zadluzenie
+        # self.zadluzenie = float(self.zadluzenie)
+
+
+    def pobieranie_magazynu_z_pliku (self):
+        with open("stan_magazynu.txt", "r") as plik:
+            for linia in plik:
+                linia = linia.split()
+                produkt, ilosc, cena, wartosc = linia
+                produkt = str(produkt)
+                produkt = produkt.replace("_", " ")
+                self.stan_magazynu[produkt] = {}
+                ilosc = float(ilosc)
+                cena = float(cena)
+                wartosc = float(wartosc)
+                self.stan_magazynu[produkt] = {"ilosc": ilosc, "cena": cena, "wartosc": wartosc}
+
+
+
+    def zapasy (self, stan_magazynu):
+        for v in stan_magazynu.values():
+            self.wartosc_zapasow += v["wartosc"]
+            return self.wartosc_zapasow
+
+
+
+    def pobieranie_konta_z_pliku (self):
+        with open("konto.txt", "r") as plik:
+            for linia in plik:
+                self.konto = float(linia)
+    def pobieranie_historii_z_pliku(self):
+        with open("historia.txt", "r") as plik:
+            for linia in plik:
+                linia = linia.strip('\n')
+                self.historia.append(linia)
+
+
+
+
+   # def __repr__(self):
+   #      return f"{self.konto}"
+fm = Hurtownia()
+
+print(fm.konto)
 @fm.przypisz_funkcje("glowny_panel")
-def glowny_panel (konto):
+def glowny_panel (fm, konto):
     print(" ------------- Program księgowy -------------\n")
     print(f"\nAktualny stan konta wynosi:{konto} zl.\n")
     print('''Wybierz opcje:
@@ -154,74 +148,79 @@ def glowny_panel (konto):
     wybor=input()
 
     if wybor == "1":
-        fm.wykonaj("kredyty")
+        fm.wykonaj("kredyty", zadluzenie=fm.zadluzenie)
     if wybor == "2":
-        fm.wykonaj("finanse")
+        fm.wykonaj("finanse", konto = fm.konto, zadluzenie = fm.zadluzenie, wartosc_zapasow=fm.wartosc_zapasow)
     if wybor == "3":
-        fm.wykonaj("obsluga_magazynu")
+        fm.wykonaj("obsluga_magazynu", fm.stan_magazynu)
     if wybor == "4":
         fm.wykonaj("szukanie_towarow")
     if wybor == "5":
         fm.wykonaj("sprzedawanie_towarow")
     if wybor == "6":
-        fm.wykonaj("kupowanie_towarow", konto)
+        fm.wykonaj("kupowanie_towarow", fm.konto)
     if wybor  == "7":
         fm.wykonaj("historia_sklepu")
     if wybor  == "koniec":
         fm.wykonaj("zakonczenie", konto, historia=None, stan_magazynu=dict(), zadluzenie=None)
 @fm.przypisz_funkcje("kredyty")
-def kredyty (zadluzenie):
+def kredyty (fm, zadluzenie):
+    print("Obsluga kredytow - Aktualny stan zadluzenia wynosi {} zl\n".format(zadluzenie))
+    print("""Wprowadzenie wartosci uruchomionego kredytu - wpisz: 1
+Splata kredytu - wpisz: 2
+Powrot do glownego menu  - wpisz: 3""")
+    odp1 = input()
+    if odp1 == "1":
+        fm.wykonaj("kredyty_1", zadluzenie=fm.zadluzenie)
+    if odp1 == "2":
+        fm.wykonaj("kredyty_2")
+    if odp1 == "3":
+       fm.wykonaj("glowny_panel", fm.konto)
+    if odp1 != "1" and odp1 != "2" and odp1 != "3":
+        print("Wybrales zla opcje!\n")
+        fm.wykonaj("kredyty")
+@fm.przypisz_funkcje("kredyty_1")
+def kredyty (fm, zadluzenie):
     while True:
-        print("Obsluga kredytow - Aktualny stan zadluzenia wynosi {} zl\n".format(zadluzenie))
-        print("""Wprowadzenie wartosci uruchomionego kredytu - wpisz: 1
-    Splata kredytu - wpisz: 2
-    Powrot do glownego menu  - wpisz: 3""")
-        odp1 = input()
-        if odp1 == "1":
-            kredyt = input("Wpisz wartosc udzielonego Ci kredytu:  \n")
-            if not kredyt.isdigit():
-                print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
-                continue
-            kredyt = float(kredyt)
-            zadluzenie += kredyt
-            print("Stan zadluzenia po zmianie wynosi {} zl\n\n".format(zadluzenie))
-
-            wpis_1_1 = ("Zaciagniety kredyt w wysokosci: {} zl".format(kredyt))
-            historia.append(wpis_1_1)
-            konto = konto + kredyt
+        kredyt = input("Wpisz wartosc udzielonego Ci kredytu:  \n")
+        if not kredyt.isdigit():
+            print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
             continue
-            odp1 = input()
-        if odp1 == "2":
-            splata = input("Wpisz kwote splaconego kredytu:")
-            if not splata.isdigit():
-                print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
-                continue
-            splata = float(splata)
-            if splata > konto:
-                print("Nie masz wystarczajacych srodkow na koncie\n\n")
-                continue
-                wybor == "1"
-            if splata <= konto:
-                zadluzenie -= splata
-                print("Stan zadluzenia po zmianie wynosi {} zl\n".format(zadluzenie))
-                wpis_1_2 = ("Splata kredytu w wysokosci: {} zl".format(splata))
-                historia.append(wpis_1_2)
-                continue
-        if odp1 == "3":
-            break
-            wybor = input()
-        else:
-            print("Wybrales zla opcje!\n")
+        kredyt = float(kredyt)
+        fm.zadluzenie += kredyt
+        print("Stan zadluzenia po zmianie wynosi {} zl\n\n".format(zadluzenie))
+        wpis_1_1 = ("Zaciagniety kredyt w wysokosci: {} zl".format(kredyt))
+        fm.historia.append(wpis_1_1),
+        fm.konto = fm.konto + kredyt
+        continue
+
+@fm.przypisz_funkcje("kredyty_2")
+def kredyty (fm):
+    while True:
+        splata = input("Wpisz kwote splaconego kredytu:")
+        if not splata.isdigit():
+            print("Wpisales inna wartosc niz liczba. Sproboj jeszcze raz\n\n")
+            continue
+        splata = float(splata)
+        if splata > konto:
+            print("Nie masz wystarczajacych srodkow na koncie\n\n")
+            continue
+            wybor == "1"
+        if splata <= konto:
+            zadluzenie -= splata
+            print("Stan zadluzenia po zmianie wynosi {} zl\n".format(zadluzenie))
+            wpis_1_2 = ("Splata kredytu w wysokosci: {} zl".format(splata))
+            historia.append(wpis_1_2)
             continue
 
 @fm.przypisz_funkcje("finanse")
-def finanse (konto):
+def finanse (fm, konto, zadluzenie, wartosc_zapasow):
     while True:
         print("Saldo magazynu, stan konta i operacje gotowkowe\n")
-      #  print("Wartosc towarow w magazynie wynosi: {} zl".format(wartosc_zapasow))
+        print("Wartosc towarow w magazynie wynosi: {} zl".format(wartosc_zapasow))
         print("Stan konta: {} zl".format(konto))
-      #  print("Wysokosc zadluzenia wynosi: {} zl".format(zadluzenie))
-      #  print("Saldo firmy (aktywa - pasywa) wynosi: {} zl\n".format(wartosc_zapasow+konto-zadluzenie))
+        print("Wysokosc zadluzenia wynosi: {} zl".format(zadluzenie))
+        print("Saldo firmy (aktywa - pasywa) wynosi: {} zl\n".format(wartosc_zapasow+konto-zadluzenie))
         print(" --------- Wybierz opcję:\n")
         print("""Jesli chcesz wplacic srodki na konto - wpisz: 1
 Jesli chcesz wyplacic srodki z konta - wpisz: 2
@@ -261,7 +260,7 @@ Powrot do menu glownego - wpisz: 3\n""")
             continue
 
 @fm.przypisz_funkcje("obsluga_magazynu")
-def obsluga_magazynu (fm):
+def obsluga_magazynu (fm, stan_magazynu, produkt):
     while True:
         print("----- Stan magazynu - wybierz opcje ------")
         print("""\nWyswietl stan magazynu - wpisz: 1
@@ -275,7 +274,7 @@ Wroc do menu glownego - wpisz: 4\n""")
             continue
         if wybor3=="1":
             number = 0
-            for row in stan_magazynu.items():
+            for row in fm.stan_magazynu.items():
                 number += 1
                 print(number, row)
             powrot=input('Powrot do menu "Stan magazynu" - wybierz "Q":   ')
@@ -296,11 +295,11 @@ Wroc do menu glownego - wpisz: 4\n""")
                 cena = float(cena)
                 wartosc = ilosc * cena
                 wartosc = float(wartosc)
-                stan_magazynu[produkt] = {"ilosc": ilosc, "cena": cena, "wartosc": wartosc}
+                rm.stan_magazynu[produkt] = {"ilosc": ilosc, "cena": cena, "wartosc": wartosc}
                 print("Wprowadzono towar: {}, w ilosci: {}, w cenie: {}, laczna wartosc: {}".format(produkt, ilosc,
                                                                                                         cena, wartosc))
                 wpis_3_1 = ("Wprowadzono do magazynu {}, w ilosci {}, po cenie {} zl".format(produkt, ilosc, cena))
-                historia.append(wpis_3_1)
+                fm.historia.append(wpis_3_1)
                 print("\nCzy chcesz wprowadzic kolejny produkt? t/n")
                 odp2 = input()
                 odp2 = odp2.lower()
@@ -316,7 +315,7 @@ Wroc do menu glownego - wpisz: 4\n""")
             while True:
                 produkt = input("\nWpisz nazwe produktu do wykreslenia:  ").strip()
                 produkt = produkt.lower()
-                if produkt not in stan_magazynu:
+                if produkt not in fm.stan_magazynu:
                     print("Nie ma takiego produktu w magazynie")
                     print("\nCzy chcesz wykreslic inny produkt? t/n")
                     odp3_1 = input()
@@ -326,14 +325,14 @@ Wroc do menu glownego - wpisz: 4\n""")
                     if odp3_1 == "n":
                         break
                         wybor == 3
-                if produkt in stan_magazynu:
+                if produkt in fm.stan_magazynu:
                     print(stan_magazynu[produkt])
                     potwierdzenie=input("\nCzy na pewno chcesz wykrelic ten produkt? t/n   ")
                     potwierdzenie=potwierdzenie.lower()
                     if potwierdzenie == "t":
                         wpis_3_2 = ("Ze stanu magazynu magazynu zdjeto {} - {}".format(produkt, stan_magazynu[produkt]))
-                        historia.append(wpis_3_2)
-                        del stan_magazynu[produkt]
+                        fm.historia.append(wpis_3_2)
+                        del fm.stan_magazynu[produkt]
                         print("\nCzy chcesz wykreslic kolejny produkt? t/n")
                         odp3_2 = input()
                         odp3_2 = odp3_2.lower()
@@ -644,12 +643,13 @@ def zakonczenie (fm, stan_magazynu, konto, zadluzenie, historia):
         for linia in historia:
             plik.write(f"{linia}")
             plik.write(f"\n")
-       # break
+            break
 
 
 
 while True:
-    fm.wykonaj("glowny_panel")
+    fm.wykonaj("glowny_panel", fm.konto)
+
     # print(fm.wykonaj("glowny_panel"))
     #
     # if fm.wykonaj("glowny_panel") =="1":
